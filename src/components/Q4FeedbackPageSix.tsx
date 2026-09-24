@@ -18,8 +18,8 @@ export const Q4FeedbackPageSix: React.FC<Q4FeedbackPageSixProps> = ({
   const showPlaceholder = !isFocused && value.length === 0;
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-4 sm:p-5 max-w-md mx-auto w-full">
-      <div className="space-y-4">
+    <div className="p-3 sm:p-4 bg-bankBg text-textPrimary flex flex-col items-center w-full">
+      <div className="w-full max-w-md space-y-4">
         {/* Question Card */}
         <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
           <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug">
@@ -36,7 +36,7 @@ export const Q4FeedbackPageSix: React.FC<Q4FeedbackPageSixProps> = ({
               onChange={(e) => onChange(e.target.value.slice(0, maxLength))}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              rows={5}
+              rows={3}
               className="w-full text-xs text-textPrimary bg-transparent border-0 focus:outline-none focus:ring-0 resize-none leading-relaxed p-1"
             />
 
@@ -64,18 +64,18 @@ export const Q4FeedbackPageSix: React.FC<Q4FeedbackPageSixProps> = ({
             </span>
           </div>
         </div>
-      </div>
 
-      {/* CTA Button with Consistent Right Arrow (Centered, Narrower, Always Visible) */}
-      <div className="pt-3 pb-2 flex justify-center flex-shrink-0">
-        <button
-          type="button"
-          onClick={onFinish}
-          className="w-48 h-11 bg-emerald-600 text-white font-extrabold text-sm rounded-full flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 transition-all active:scale-95 cursor-pointer"
-        >
-          <span>Finish & Submit</span>
-          <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-        </button>
+        {/* CTA Button with Consistent Right Arrow (Positioned Directly Below Card) */}
+        <div className="pt-2 flex justify-center w-full">
+          <button
+            type="button"
+            onClick={onFinish}
+            className="w-48 h-11 bg-emerald-600 text-white font-extrabold text-sm rounded-full flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 transition-all active:scale-95 cursor-pointer"
+          >
+            <span>Finish & Submit</span>
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          </button>
+        </div>
       </div>
     </div>
   );

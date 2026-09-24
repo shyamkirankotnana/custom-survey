@@ -16,8 +16,8 @@ export const Q2FollowUpPageFour: React.FC<Q2FollowUpPageFourProps> = ({
   const remaining = maxLength - value.length;
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-3 sm:p-4 bg-bankBg text-textPrimary">
-      <div className="space-y-4">
+    <div className="p-3 sm:p-4 bg-bankBg text-textPrimary flex flex-col items-center w-full">
+      <div className="w-full max-w-md space-y-4">
         {/* Single Question Card */}
         <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
           <div className="flex items-center gap-1.5 mb-2">
@@ -55,18 +55,18 @@ export const Q2FollowUpPageFour: React.FC<Q2FollowUpPageFourProps> = ({
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Dark Emerald Green Primary Action Button (Centered, Narrower, Always Visible) */}
-      <div className="pt-3 pb-2 flex justify-center flex-shrink-0">
-        <button
-          type="button"
-          onClick={onNext}
-          className="w-44 h-11 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer"
-        >
-          <span>Next</span>
-          <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-        </button>
+        {/* Dark Emerald Green Primary Action Button (Positioned Directly Below Card) */}
+        <div className="pt-2 flex justify-center w-full">
+          <button
+            type="button"
+            onClick={onNext}
+            className="w-44 h-11 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer"
+          >
+            <span>Next</span>
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          </button>
+        </div>
       </div>
     </div>
   );

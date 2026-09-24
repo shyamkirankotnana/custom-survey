@@ -22,10 +22,10 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
   ];
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-3 sm:p-4 bg-bankBg text-textPrimary">
-      <div className="space-y-4">
+    <div className="p-3 sm:p-4 bg-bankBg text-textPrimary flex flex-col items-center w-full">
+      <div className="w-full max-w-md space-y-4">
         {/* Question 2 Card */}
-        <div className="bg-white rounded-2xl p-2.5 sm:p-4 shadow-card border border-bankBorder">
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
           <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug mb-3">
             Q2. How easy was it for you to get a resolution from your Bank Relationship Manager for your query / transaction?
           </h2>
@@ -53,23 +53,23 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
             })}
           </div>
         </div>
-      </div>
 
-      {/* Dark Emerald Green Primary Action Button (Centered, Narrower, Always Visible) */}
-      <div className="pt-3 pb-2 flex justify-center flex-shrink-0">
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={value === null}
-          className={`w-44 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
-            value !== null
-              ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.98]'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
-          }`}
-        >
-          <span>Next</span>
-          <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-        </button>
+        {/* Dark Emerald Green Primary Action Button (Positioned Directly Below Card) */}
+        <div className="pt-2 flex justify-center w-full">
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={value === null}
+            className={`w-44 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
+              value !== null
+                ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.98]'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
+            }`}
+          >
+            <span>Next</span>
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          </button>
+        </div>
       </div>
     </div>
   );
