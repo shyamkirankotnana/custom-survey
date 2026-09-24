@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={mulish.variable}>
-      <body className="font-sans antialiased bg-gray-100 min-h-screen">
+    <html lang="en" className={mulish.variable} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-gray-100 min-h-screen" suppressHydrationWarning>
         {children}
       </body>
     </html>
