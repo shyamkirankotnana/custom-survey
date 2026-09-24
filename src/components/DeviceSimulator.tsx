@@ -11,12 +11,12 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
   children,
 }) => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start py-0 sm:py-4 px-0 sm:px-2">
+    <div className="min-h-screen bg-bankBg sm:bg-gray-100 flex flex-col items-center justify-start py-0 sm:py-4 px-0 sm:px-2 w-full">
       <div
-        className="w-full bg-bankBg min-h-screen sm:min-h-[720px] sm:rounded-2xl sm:shadow-lg sm:border sm:border-gray-200 overflow-hidden flex flex-col transition-all duration-300"
-        style={{ maxWidth: deviceWidth }}
+        className="w-full max-w-full sm:max-w-[var(--dev-width)] bg-bankBg min-h-screen sm:min-h-[720px] sm:rounded-2xl sm:shadow-lg sm:border sm:border-gray-200 overflow-hidden flex flex-col transition-all duration-300"
+        style={{ '--dev-width': deviceWidth } as React.CSSProperties}
       >
-        <div className="flex-1 flex flex-col min-h-0 relative">
+        <div className="flex-1 flex flex-col min-h-0 relative w-full">
           {children}
         </div>
       </div>

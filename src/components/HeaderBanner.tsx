@@ -20,7 +20,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
   ];
 
   return (
-    <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-sm">
+    <header className="hidden sm:block bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-sm w-full">
       <div className="max-w-2xl mx-auto text-white px-1.5 py-1.5 flex flex-col items-center justify-center gap-1">
         {/* Top Line: Centered "Screen Size" Label */}
         <div className="flex items-center justify-center gap-1 text-[11px] font-bold text-gray-300">
