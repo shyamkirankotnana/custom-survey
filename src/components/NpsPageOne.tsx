@@ -24,21 +24,6 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
     return '😃';
   };
 
-  // Subtle Persuasive Color Grading Helper for Unselected Options (Bad to Good)
-  const getSubtleOptionStyle = (score: number) => {
-    if (score <= 6) {
-      return 'bg-white text-gray-800 border-gray-300 hover:border-emerald-400/50 hover:bg-gray-50';
-    }
-    if (score <= 8) {
-      return 'bg-amber-50/20 text-gray-900 border-amber-200/80 hover:border-emerald-400 hover:bg-amber-50/50';
-    }
-    if (score === 9) {
-      return 'bg-emerald-50/30 text-emerald-950 border-emerald-300/80 hover:bg-emerald-50/70 hover:border-emerald-500 font-medium';
-    }
-    // Score 10 - Subtle Persuasive Highlight Tint
-    return 'bg-emerald-50/50 text-emerald-950 border-emerald-400 hover:bg-emerald-100/80 hover:border-emerald-600 font-semibold ring-1 ring-emerald-300/40';
-  };
-
   return (
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary">
       <div className="space-y-4">
@@ -48,11 +33,10 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
             1. Based on the recent interaction you had with your Relationship Manager, how likely are you to recommend the Bank to a friend, relative or colleague?
           </h2>
 
-          {/* 0 to 10 Scale Buttons Grid with Persuasive Color Grading (Bad to Good) */}
+          {/* 0 to 10 Scale Buttons Grid (Clean Uniform Styling) */}
           <div className="grid grid-cols-11 gap-0.5 sm:gap-1.5 w-full my-2">
             {scores.map((score) => {
               const isSelected = npsScore === score;
-              const unselectedStyle = getSubtleOptionStyle(score);
 
               return (
                 <button
@@ -63,7 +47,7 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
                   className={`aspect-square w-full rounded-md font-normal flex items-center justify-center p-0 leading-none transition-all duration-150 cursor-pointer border ${
                     isSelected
                       ? 'bg-emerald-600 text-white border-emerald-600 shadow-md font-bold scale-[1.04] z-10'
-                      : unselectedStyle
+                      : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                   }`}
                   aria-label={`Score ${score}`}
                 >

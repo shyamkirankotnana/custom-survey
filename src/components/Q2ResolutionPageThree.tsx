@@ -21,18 +21,6 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
     'Very Easy',
   ];
 
-  // Subtle Persuasive Color Grading for Q2 Options
-  const getSubtleOptionStyle = (opt: EaseOption) => {
-    if (opt === 'Very Difficult' || opt === 'Difficult') {
-      return 'bg-white text-gray-800 border-gray-300 hover:border-emerald-400/50 hover:bg-gray-50';
-    }
-    if (opt === 'Easy') {
-      return 'bg-emerald-50/25 text-emerald-950 border-emerald-300/80 hover:bg-emerald-50/60 font-medium';
-    }
-    // Very Easy - Subtle Persuasive Highlight
-    return 'bg-emerald-50/50 text-emerald-950 border-emerald-400 hover:bg-emerald-100/80 font-semibold ring-1 ring-emerald-300/40';
-  };
-
   return (
     <div className="flex-1 flex flex-col justify-between p-3 sm:p-4 bg-bankBg text-textPrimary">
       <div className="space-y-4">
@@ -42,11 +30,10 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
             Q2. How easy was it for you to get a resolution from your Bank Relationship Manager for your query / transaction?
           </h2>
 
-          {/* Option Pills - Bad to Good Order, Subtle Color Grading, Fluid Font Scaling */}
+          {/* Option Pills - Bad to Good Order, Uniform Styling, Fluid Font Scaling */}
           <div className="grid grid-cols-4 gap-1 w-full my-2">
             {options.map((opt) => {
               const isSelected = value === opt;
-              const unselectedStyle = getSubtleOptionStyle(opt);
 
               return (
                 <button
@@ -57,7 +44,7 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
                   className={`h-9 sm:h-10 px-0.5 rounded-xl font-medium transition-all border whitespace-nowrap leading-none flex items-center justify-center cursor-pointer ${
                     isSelected
                       ? 'bg-emerald-600 text-white border-emerald-600 shadow-md scale-[1.02] font-extrabold'
-                      : unselectedStyle
+                      : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                   }`}
                 >
                   <span>{opt}</span>

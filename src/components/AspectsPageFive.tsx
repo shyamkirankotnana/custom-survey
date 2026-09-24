@@ -58,18 +58,6 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     'Very Good',
   ];
 
-  // Subtle Persuasive Color Grading Helper for Q3 Aspect Options
-  const getSubtleOptionStyle = (opt: RatingOption) => {
-    if (opt === 'Very Poor' || opt === 'Poor') {
-      return 'bg-white text-gray-800 border-gray-300 hover:border-emerald-400/50 hover:bg-gray-50';
-    }
-    if (opt === 'Good') {
-      return 'bg-emerald-50/25 text-emerald-950 border-emerald-300/80 hover:bg-emerald-50/60 font-medium';
-    }
-    // Very Good - Subtle Persuasive Highlight Tint
-    return 'bg-emerald-50/50 text-emerald-950 border-emerald-400 hover:bg-emerald-100/80 font-semibold ring-1 ring-emerald-300/40';
-  };
-
   return (
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary">
       <div className="space-y-2.5">
@@ -108,11 +96,10 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                   </p>
                 )}
 
-                {/* Rating Buttons Row - Bad to Good, Subtle Color Grading, No Border Touching */}
+                {/* Rating Buttons Row - Bad to Good, Uniform Clean Styling, No Border Touching */}
                 <div className="grid grid-cols-4 gap-1 w-full mt-1.5">
                   {options.map((opt) => {
                     const isSelected = selected === opt;
-                    const unselectedStyle = getSubtleOptionStyle(opt);
 
                     return (
                       <button
@@ -123,7 +110,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                         className={`h-8 min-[360px]:h-9 px-0.5 rounded-lg flex items-center justify-center transition-all border whitespace-nowrap leading-none cursor-pointer ${
                           isSelected
                             ? 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-sm scale-[1.02]'
-                            : unselectedStyle
+                            : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                         }`}
                       >
                         {opt}
