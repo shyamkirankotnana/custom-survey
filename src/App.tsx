@@ -157,70 +157,89 @@ export const App: React.FC = () => {
         progressPercentage={progressPercentage}
       />
 
-      {/* 1 Question Per Screen Controller */}
-      <div className="flex-1 flex flex-col min-h-0 bg-bankBg">
-        {/* Screen 1: Question 1 (NPS) */}
-        {surveyState.page === 1 && (
-          <NpsPageOne
-            npsScore={surveyState.npsScore}
-            onScoreSelect={handleScoreSelect}
-            onNext={handleNextFromQ1}
-          />
-        )}
+      {/* 1 Question Per Screen Controller with Faint 'Draft Survey' Watermark */}
+      <div className="flex-1 flex flex-col min-h-0 bg-bankBg relative overflow-hidden">
+        {/* Subtle Light Grey Background Watermark Overlay */}
+        <div className="absolute inset-0 pointer-events-none select-none z-0 flex items-center justify-center overflow-hidden opacity-35">
+          <div className="text-gray-400/40 text-[11px] sm:text-xs uppercase tracking-[0.35em] font-extrabold rotate-[-25deg] whitespace-nowrap">
+            Draft Survey • Draft Survey • Draft Survey
+          </div>
+        </div>
 
-        {/* Screen 2: Q1 Follow-up (Q1a if 0-8, Q1b if 9-10) */}
-        {surveyState.page === 2 && (
-          <Q1FollowUpPageTwo
-            npsScore={surveyState.npsScore}
-            value={surveyState.q1FollowUpText}
-            onChange={handleQ1FollowUpChange}
-            onNext={handleNextFromQ1FollowUp}
-          />
-        )}
+        {/* Screen Content Wrapper */}
+        <div className="relative z-10 flex-1 flex flex-col min-h-0 justify-between">
+          <div className="flex-1 flex flex-col min-h-0">
+            {/* Screen 1: Question 1 (NPS) */}
+            {surveyState.page === 1 && (
+              <NpsPageOne
+                npsScore={surveyState.npsScore}
+                onScoreSelect={handleScoreSelect}
+                onNext={handleNextFromQ1}
+              />
+            )}
 
-        {/* Screen 3: Question 2 (Resolution Ease) */}
-        {surveyState.page === 3 && (
-          <Q2ResolutionPageThree
-            value={surveyState.resolutionEase}
-            onChange={handleResolutionEaseChange}
-            onNext={handleNextFromQ2}
-          />
-        )}
+            {/* Screen 2: Q1 Follow-up (Q1a if 0-8, Q1b if 9-10) */}
+            {surveyState.page === 2 && (
+              <Q1FollowUpPageTwo
+                npsScore={surveyState.npsScore}
+                value={surveyState.q1FollowUpText}
+                onChange={handleQ1FollowUpChange}
+                onNext={handleNextFromQ1FollowUp}
+              />
+            )}
 
-        {/* Screen 4: Q2a Follow-up (ONLY if Difficult or Very Difficult) */}
-        {surveyState.page === 4 && (
-          <Q2FollowUpPageFour
-            value={surveyState.q2FollowUpText}
-            onChange={handleQ2FollowUpChange}
-            onNext={handleNextFromQ2FollowUp}
-          />
-        )}
+            {/* Screen 3: Question 2 (Resolution Ease) */}
+            {surveyState.page === 3 && (
+              <Q2ResolutionPageThree
+                value={surveyState.resolutionEase}
+                onChange={handleResolutionEaseChange}
+                onNext={handleNextFromQ2}
+              />
+            )}
 
-        {/* Screen 5: Question 3 (Aspect Ratings) */}
-        {surveyState.page === 5 && (
-          <AspectsPageFive
-            ratings={surveyState.aspectRatings}
-            onRatingSelect={handleAspectRatingSelect}
-            onFinish={handleNextFromAspects}
-          />
-        )}
+            {/* Screen 4: Q2a Follow-up (ONLY if Difficult or Very Difficult) */}
+            {surveyState.page === 4 && (
+              <Q2FollowUpPageFour
+                value={surveyState.q2FollowUpText}
+                onChange={handleQ2FollowUpChange}
+                onNext={handleNextFromQ2FollowUp}
+              />
+            )}
 
-        {/* Screen 6: Question 4 (Q4 General Open-End Feedback) */}
-        {surveyState.page === 6 && (
-          <Q4FeedbackPageSix
-            value={surveyState.q4FeedbackText}
-            onChange={handleQ4FeedbackChange}
-            onFinish={handleFinish}
-          />
-        )}
+            {/* Screen 5: Question 3 (Aspect Ratings) */}
+            {surveyState.page === 5 && (
+              <AspectsPageFive
+                ratings={surveyState.aspectRatings}
+                onRatingSelect={handleAspectRatingSelect}
+                onFinish={handleNextFromAspects}
+              />
+            )}
 
-        {/* Screen 7: Success / Confirmation (No Back Button, No Summary Box, No Test Button) */}
-        {surveyState.page === 7 && (
-          <SuccessPageThree
-            surveyState={surveyState}
-            onReset={handleReset}
-          />
-        )}
+            {/* Screen 6: Question 4 (Q4 General Open-End Feedback) */}
+            {surveyState.page === 6 && (
+              <Q4FeedbackPageSix
+                value={surveyState.q4FeedbackText}
+                onChange={handleQ4FeedbackChange}
+                onFinish={handleFinish}
+              />
+            )}
+
+            {/* Screen 7: Success / Confirmation (No Back Button, No Summary Box, No Test Button) */}
+            {surveyState.page === 7 && (
+              <SuccessPageThree
+                surveyState={surveyState}
+                onReset={handleReset}
+              />
+            )}
+          </div>
+
+          {/* Subtle Light Grey Footer Watermark Text (Non-Intrusive) */}
+          <div className="py-1 text-center flex-shrink-0 select-none pointer-events-none">
+            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gray-400/60">
+              Draft Survey
+            </span>
+          </div>
+        </div>
       </div>
     </DeviceSimulator>
   );

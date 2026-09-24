@@ -31,9 +31,14 @@ export const IciciHeader: React.FC<IciciHeaderProps> = ({
           )}
         </div>
 
-        <h1 className="text-base font-bold tracking-tight text-white text-center flex-1">
-          {title}
-        </h1>
+        <div className="flex flex-col items-center justify-center flex-1">
+          <h1 className="text-base font-bold tracking-tight text-white text-center leading-tight">
+            {title}
+          </h1>
+          <span className="text-[9px] tracking-widest text-gray-400 uppercase font-semibold select-none pointer-events-none leading-none mt-0.5">
+            Draft Survey
+          </span>
+        </div>
 
         <div className="w-8 h-8" />
       </div>
