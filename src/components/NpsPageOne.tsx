@@ -76,13 +76,13 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
         </div>
       </div>
 
-      {/* Dark Emerald Green Primary CTA Button */}
-      <div className="mt-6 pt-2">
+      {/* Dark Emerald Green Primary CTA Button (Centered, Narrower, Always Visible) */}
+      <div className="pt-3 pb-2 flex justify-center flex-shrink-0">
         <button
           type="button"
           onClick={onNext}
           disabled={npsScore === null}
-          className={`w-full h-12 sm:h-13 rounded-xl font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
+          className={`w-44 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
             npsScore !== null
               ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.98]'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'

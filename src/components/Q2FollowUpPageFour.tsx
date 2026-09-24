@@ -32,7 +32,7 @@ export const Q2FollowUpPageFour: React.FC<Q2FollowUpPageFourProps> = ({
 
           <div className="relative">
             <textarea
-              rows={4}
+              rows={3}
               maxLength={maxLength}
               value={value}
               onChange={(e) => onChange(e.target.value)}
@@ -57,12 +57,12 @@ export const Q2FollowUpPageFour: React.FC<Q2FollowUpPageFourProps> = ({
         </div>
       </div>
 
-      {/* Dark Emerald Green Primary Action Button (Next) */}
-      <div className="mt-6 pt-2">
+      {/* Dark Emerald Green Primary Action Button (Centered, Narrower, Always Visible) */}
+      <div className="pt-3 pb-2 flex justify-center flex-shrink-0">
         <button
           type="button"
           onClick={onNext}
-          className="w-full h-12 rounded-xl bg-emerald-600 text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer"
+          className="w-44 h-11 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer"
         >
           <span>Next</span>
           <ArrowRight className="w-4 h-4 stroke-[2.5]" />

@@ -59,17 +59,17 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   ];
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary">
-      <div className="space-y-2.5">
+    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary overflow-hidden h-full">
+      <div className="flex-1 flex flex-col min-h-0 space-y-2.5 overflow-y-auto no-scrollbar pb-2">
         {/* Section Title */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
           <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug">
             Q3. Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
         {/* Aspect Cards List */}
-        <div className="space-y-2.5">
+        <div className="space-y-2.5 flex-1">
           {aspectItems.map((item, idx) => {
             const selected = ratings[item.id] || null;
 
@@ -121,12 +121,12 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
         </div>
       </div>
 
-      {/* Dark Emerald Green Primary Action Button (Next) */}
-      <div className="mt-5 pt-2 sticky bottom-0 bg-bankBg/95 backdrop-blur-sm pb-1">
+      {/* Dark Emerald Green Primary Action Button (Centered, Narrower, Always Visible) */}
+      <div className="pt-2 pb-2 bg-bankBg flex justify-center flex-shrink-0 z-20 border-t border-gray-200/40">
         <button
           type="button"
           onClick={onFinish}
-          className="w-full h-12 rounded-xl bg-emerald-600 text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer"
+          className="w-44 h-11 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer"
         >
           <span>Next</span>
           <ArrowRight className="w-4 h-4 stroke-[2.5]" />

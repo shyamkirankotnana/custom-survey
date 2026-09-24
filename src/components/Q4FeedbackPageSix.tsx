@@ -66,12 +66,12 @@ export const Q4FeedbackPageSix: React.FC<Q4FeedbackPageSixProps> = ({
         </div>
       </div>
 
-      {/* CTA Button with Consistent Right Arrow */}
-      <div className="pt-4">
+      {/* CTA Button with Consistent Right Arrow (Centered, Narrower, Always Visible) */}
+      <div className="pt-3 pb-2 flex justify-center flex-shrink-0">
         <button
           type="button"
           onClick={onFinish}
-          className="w-full h-12 bg-emerald-600 text-white font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 transition-all active:scale-95 cursor-pointer"
+          className="w-48 h-11 bg-emerald-600 text-white font-extrabold text-sm rounded-full flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 transition-all active:scale-95 cursor-pointer"
         >
           <span>Finish & Submit</span>
           <ArrowRight className="w-4 h-4 stroke-[2.5]" />
