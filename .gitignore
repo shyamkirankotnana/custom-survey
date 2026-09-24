@@ -22,6 +22,7 @@ jspm_packages/
 .npm
 
 # Build outputs
+.next/
 dist/
 dist-ssr/
 *.local

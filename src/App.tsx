@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { IciciHeader } from './components/IciciHeader';
 import { NpsPageOne } from './components/NpsPageOne';
