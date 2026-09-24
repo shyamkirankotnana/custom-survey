@@ -82,7 +82,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <h3 className="text-xs font-bold text-textPrimary leading-snug">
-                    <span className="text-emerald-700 font-extrabold mr-1">{idx + 1}.</span>
+                    <span className="text-emerald-700 font-extrabold mr-1">{String.fromCharCode(97 + idx)}.</span>
                     {item.title}
                   </h3>
                 </div>
