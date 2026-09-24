@@ -1,6 +1,6 @@
 import React from 'react';
 import { RatingOption } from '../types/survey';
-import { Check, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface AspectsPageFiveProps {
   ratings: Record<string, RatingOption>;
@@ -85,9 +85,6 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                     <span className="text-emerald-700 font-extrabold mr-1">{idx + 1}.</span>
                     {item.title}
                   </h3>
-                  {selected && (
-                    <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3] flex-shrink-0 mt-0.5" />
-                  )}
                 </div>
 
                 {item.subtitle && (
