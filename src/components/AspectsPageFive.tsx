@@ -62,9 +62,9 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary">
       <div className="space-y-2.5">
         {/* Section Title */}
-        <div className="bg-white rounded-xl p-2.5 shadow-card border border-bankBorder">
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
           <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug">
-            3. Please rate the Relationship Manager on the below aspects:
+            Q3. Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 

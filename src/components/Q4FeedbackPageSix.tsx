@@ -21,9 +21,9 @@ export const Q4FeedbackPageSix: React.FC<Q4FeedbackPageSixProps> = ({
     <div className="flex-1 flex flex-col justify-between p-4 sm:p-5 max-w-md mx-auto w-full">
       <div className="space-y-4">
         {/* Question Card */}
-        <div className="bg-white rounded-xl p-4 shadow-card border border-bankBorder space-y-2">
-          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug">
-            4. Is there any other feedback related to your Relationship Manager that you want to share?
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
+          <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug">
+            Q4. Is there any other feedback related to your Relationship Manager that you want to share?
           </h2>
         </div>
 

@@ -15,9 +15,9 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
 }) => {
   const scores = Array.from({ length: 11 }, (_, i) => i);
 
-  // Dynamic Sentiment Emoji
+  // Dynamic Sentiment Emoji (Initial State set to Happiest Emoji)
   const getSentimentEmoji = (score: NpsScore) => {
-    if (score === null) return '😐';
+    if (score === null) return '😃';
     if (score <= 6) return '😟';
     if (score <= 8) return '😐';
     if (score === 9) return '🙂';
@@ -25,12 +25,12 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary">
+    <div className="flex-1 flex flex-col justify-between p-3 sm:p-4 bg-bankBg text-textPrimary">
       <div className="space-y-4">
         {/* Question 1 Prompt */}
-        <div className="bg-white rounded-2xl p-2 sm:p-4 shadow-card border border-bankBorder">
-          <h2 className="text-xs min-[360px]:text-sm sm:text-base font-bold text-textPrimary leading-snug mb-3.5">
-            1. Based on the recent interaction you had with your Relationship Manager, how likely are you to recommend the Bank to a friend, relative or colleague?
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
+          <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug mb-3">
+            Q1. Based on the recent interaction you had with your Relationship Manager, how likely are you to recommend the Bank to a friend, relative or colleague?
           </h2>
 
           {/* 0 to 10 Scale Buttons Grid (Clean Uniform Styling) */}
