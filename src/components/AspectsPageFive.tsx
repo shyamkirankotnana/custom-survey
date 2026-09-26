@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RatingOption } from '../types/survey';
 import { ArrowRight } from 'lucide-react';
 
@@ -52,13 +52,21 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   onQ4FeedbackChange,
   onFinish,
 }) => {
-  // Positive to Negative order (reversed per client feedback)
+  // Positive to Negative order
   const options: Exclude<RatingOption, null>[] = [
     'Very Good',
     'Good',
     'Poor',
     'Very Poor',
   ];
+
+  // Header display split into lines for compact columns
+  const headerLabels: Record<string, { line1: string; line2?: string }> = {
+    'Very Good': { line1: 'Very', line2: 'Good' },
+    'Good': { line1: 'Good' },
+    'Poor': { line1: 'Poor' },
+    'Very Poor': { line1: 'Very', line2: 'Poor' },
+  };
 
   const maxLength = 500;
   const minLength = 20;
@@ -68,24 +76,32 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary overflow-hidden h-full">
       <div className="flex-1 flex flex-col min-h-0 space-y-2.5 overflow-y-auto no-scrollbar pb-2">
         {/* Q3 Section Title */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0">
+        <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
           <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug">
             Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
-        {/* Grid Table Layout */}
+        {/* Optimized Grid Table — Maximum text area on left, compact right-aligned radio option columns */}
         <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0">
           {/* Table Header */}
-          <div className="grid grid-cols-[1fr_repeat(4,_minmax(0,_1fr))] border-b border-gray-200 bg-orange-50">
-            <div className="p-2 sm:p-3 text-xs sm:text-sm font-bold text-textPrimary flex items-center">
+          <div
+            className="border-b-2 border-orange-200 bg-orange-50/90"
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 34px)' }}
+          >
+            <div className="px-2.5 py-2 text-[11px] sm:text-xs font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
               Aspects
             </div>
             {options.map((opt) => (
-              <div key={opt} className="p-1.5 sm:p-2 text-center flex items-center justify-center">
-                <span className="text-[9px] sm:text-[11px] font-bold text-orange-700 whitespace-nowrap leading-tight">
-                  {opt}
+              <div key={opt} className="py-1.5 px-0.5 flex flex-col items-center justify-center text-center">
+                <span className="text-[8px] sm:text-[9px] font-extrabold text-orange-800 leading-none">
+                  {headerLabels[opt].line1}
                 </span>
+                {headerLabels[opt].line2 && (
+                  <span className="text-[8px] sm:text-[9px] font-extrabold text-orange-800 leading-none mt-0.5">
+                    {headerLabels[opt].line2}
+                  </span>
+                )}
               </div>
             ))}
           </div>
@@ -98,37 +114,41 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
             return (
               <div
                 key={item.id}
-                className={`grid grid-cols-[1fr_repeat(4,_minmax(0,_1fr))] border-b border-gray-100 last:border-b-0 ${
+                className={`border-b border-gray-100 last:border-b-0 ${
                   isEvenRow ? 'bg-white' : 'bg-gray-50/50'
-                }`}
+                } ${selected ? 'bg-orange-50/40' : ''} transition-colors`}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 34px)' }}
               >
-                {/* Aspect Label (LHS) */}
-                <div className="p-2 sm:p-3 flex items-center">
+                {/* Aspect Label — Max width so text fits in minimal lines */}
+                <div className="px-2.5 py-2 flex items-center min-h-[42px]">
                   <span className="text-[11px] sm:text-xs text-textPrimary leading-snug font-medium">
                     {item.title}
                   </span>
                 </div>
 
-                {/* Radio Buttons (RHS) */}
+                {/* Radio Buttons — Entire 34px cell is clickable tap target */}
                 {options.map((opt) => {
                   const isSelected = selected === opt;
                   return (
-                    <div key={opt} className="p-1.5 flex items-center justify-center">
-                      <button
-                        type="button"
-                        onClick={() => onRatingSelect(item.id, opt)}
-                        className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-all cursor-pointer flex items-center justify-center ${
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => onRatingSelect(item.id, opt)}
+                      className="w-full h-full min-h-[42px] flex items-center justify-center cursor-pointer group focus:outline-none"
+                      aria-label={`${item.title} - ${opt}`}
+                    >
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
                           isSelected
-                            ? 'border-orange-500 bg-orange-500'
-                            : 'border-gray-300 bg-white hover:border-orange-300'
+                            ? 'border-orange-500 bg-orange-500 shadow-sm scale-105'
+                            : 'border-gray-300 bg-white group-hover:border-orange-400 group-active:scale-95'
                         }`}
-                        aria-label={`${item.title} - ${opt}`}
                       >
                         {isSelected && (
-                          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white" />
+                          <div className="w-1.5 h-1.5 rounded-full bg-white" />
                         )}
-                      </button>
-                    </div>
+                      </div>
+                    </button>
                   );
                 })}
               </div>
@@ -137,8 +157,8 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
         </div>
 
         {/* Q4 — On same screen as Q3 */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0">
-          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-3">
+        <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
+          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-2.5">
             Is there any other feedback related to your Relationship Manager that you want to share?
           </h2>
 
@@ -151,7 +171,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
             className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm text-textPrimary placeholder:text-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
           />
 
-          <div className="flex items-center justify-end mt-2 px-1">
+          <div className="flex items-center justify-end mt-1.5 px-1">
             <span
               className={`font-semibold text-[11px] ${
                 q4FeedbackText.length > 0 && q4FeedbackText.length < minLength ? 'text-red-500' : 'text-textSecondary'
@@ -185,3 +205,4 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     </div>
   );
 };
+
