@@ -97,18 +97,21 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
               className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm text-textPrimary placeholder:text-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
             />
 
-            <div className="flex items-center justify-end mt-2 px-1">
+            {/* Same-line aligned middle: Warning text on left, character count on right */}
+            <div className="flex items-center justify-between mt-2 px-1 text-[11px] min-h-[18px]">
+              <div>
+                {q1FollowUpText.length > 0 && q1FollowUpText.length < minLength && (
+                  <span className="text-red-500 font-medium">Minimum {minLength} characters required</span>
+                )}
+              </div>
               <span
-                className={`font-semibold text-[11px] ${
+                className={`font-semibold ${
                   q1FollowUpText.length > 0 && q1FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
                 }`}
               >
                 {q1FollowUpText.length} / {maxLength}
               </span>
             </div>
-            {q1FollowUpText.length > 0 && q1FollowUpText.length < minLength && (
-              <p className="text-[11px] text-red-500 mt-1 px-1">Minimum {minLength} characters required</p>
-            )}
           </div>
         )}
 

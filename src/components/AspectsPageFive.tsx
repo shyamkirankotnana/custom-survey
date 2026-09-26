@@ -68,6 +68,42 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     'Very Poor': { line1: 'Very', line2: 'Poor' },
   };
 
+  // Option color grading based on label
+  const optionColors: Record<
+    string,
+    {
+      header: string;
+      radio: string;
+      rowBg: string;
+      hoverBorder: string;
+    }
+  > = {
+    'Very Good': {
+      header: 'text-green-700',
+      radio: 'border-green-600 bg-green-600',
+      rowBg: 'bg-green-50/40',
+      hoverBorder: 'group-hover:border-green-500',
+    },
+    'Good': {
+      header: 'text-emerald-700',
+      radio: 'border-emerald-500 bg-emerald-500',
+      rowBg: 'bg-emerald-50/40',
+      hoverBorder: 'group-hover:border-emerald-400',
+    },
+    'Poor': {
+      header: 'text-orange-700',
+      radio: 'border-orange-500 bg-orange-500',
+      rowBg: 'bg-orange-50/40',
+      hoverBorder: 'group-hover:border-orange-400',
+    },
+    'Very Poor': {
+      header: 'text-red-700',
+      radio: 'border-red-600 bg-red-600',
+      rowBg: 'bg-red-50/40',
+      hoverBorder: 'group-hover:border-red-500',
+    },
+  };
+
   const maxLength = 500;
   const minLength = 20;
   const isQ4Valid = q4FeedbackText.length === 0 || q4FeedbackText.length >= minLength;
@@ -84,7 +120,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
 
         {/* Optimized Grid Table — Maximum text area on left, compact right-aligned radio option columns */}
         <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0">
-          {/* Table Header */}
+          {/* Table Header with Color Graded Option Titles */}
           <div
             className="border-b-2 border-orange-200 bg-orange-50/90"
             style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 40px)' }}
@@ -92,31 +128,39 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
             <div className="px-2.5 py-2 text-[11px] sm:text-xs font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
               Aspects
             </div>
-            {options.map((opt) => (
-              <div key={opt} className="py-1.5 px-0 flex flex-col items-center justify-center text-center overflow-hidden">
-                <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-orange-800 leading-none whitespace-nowrap">
-                  {headerLabels[opt].line1}
-                </span>
-                {headerLabels[opt].line2 && (
-                  <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-orange-800 leading-none mt-0.5 whitespace-nowrap">
-                    {headerLabels[opt].line2}
+            {options.map((opt) => {
+              const colors = optionColors[opt];
+              return (
+                <div key={opt} className="py-1.5 px-0 flex flex-col items-center justify-center text-center overflow-hidden">
+                  <span className={`text-[8.5px] sm:text-[9.5px] font-extrabold ${colors.header} leading-none whitespace-nowrap`}>
+                    {headerLabels[opt].line1}
                   </span>
-                )}
-              </div>
-            ))}
+                  {headerLabels[opt].line2 && (
+                    <span className={`text-[8.5px] sm:text-[9.5px] font-extrabold ${colors.header} leading-none mt-0.5 whitespace-nowrap`}>
+                      {headerLabels[opt].line2}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
-          {/* Table Rows */}
+          {/* Table Rows with Color Graded Selections */}
           {aspectItems.map((item, idx) => {
             const selected = ratings[item.id] || null;
             const isEvenRow = idx % 2 === 0;
+            const selectedColor = selected ? optionColors[selected] : null;
 
             return (
               <div
                 key={item.id}
                 className={`border-b border-gray-100 last:border-b-0 ${
-                  isEvenRow ? 'bg-white' : 'bg-gray-50/50'
-                } ${selected ? 'bg-orange-50/40' : ''} transition-colors`}
+                  selectedColor
+                    ? selectedColor.rowBg
+                    : isEvenRow
+                    ? 'bg-white'
+                    : 'bg-gray-50/50'
+                } transition-colors`}
                 style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 40px)' }}
               >
                 {/* Aspect Label — Max width so text fits in minimal lines */}
@@ -126,9 +170,11 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                   </span>
                 </div>
 
-                {/* Radio Buttons — Entire 34px cell is clickable tap target */}
+                {/* Radio Buttons — Label-based color grading */}
                 {options.map((opt) => {
                   const isSelected = selected === opt;
+                  const colors = optionColors[opt];
+
                   return (
                     <button
                       key={opt}
@@ -140,8 +186,8 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                       <div
                         className={`w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
                           isSelected
-                            ? 'border-orange-500 bg-orange-500 shadow-sm scale-105'
-                            : 'border-gray-300 bg-white group-hover:border-orange-400 group-active:scale-95'
+                            ? `${colors.radio} shadow-sm scale-105`
+                            : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
                         }`}
                       >
                         {isSelected && (
@@ -171,18 +217,21 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
             className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm text-textPrimary placeholder:text-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
           />
 
-          <div className="flex items-center justify-end mt-1.5 px-1">
+          {/* Same-line aligned middle: Warning text on left, character count on right */}
+          <div className="flex items-center justify-between mt-2 px-1 text-[11px] min-h-[18px]">
+            <div>
+              {q4FeedbackText.length > 0 && q4FeedbackText.length < minLength && (
+                <span className="text-red-500 font-medium">Minimum {minLength} characters required</span>
+              )}
+            </div>
             <span
-              className={`font-semibold text-[11px] ${
+              className={`font-semibold ${
                 q4FeedbackText.length > 0 && q4FeedbackText.length < minLength ? 'text-red-500' : 'text-textSecondary'
               }`}
             >
               {q4FeedbackText.length} / {maxLength}
             </span>
           </div>
-          {q4FeedbackText.length > 0 && q4FeedbackText.length < minLength && (
-            <p className="text-[11px] text-red-500 mt-1 px-1">Minimum {minLength} characters required</p>
-          )}
         </div>
       </div>
 
