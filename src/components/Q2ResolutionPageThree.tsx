@@ -17,12 +17,12 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
   onQ2FollowUpChange,
   onNext,
 }) => {
-  // Positive to Negative order (reversed per client feedback)
+  // Negative to Positive order (lower to upper)
   const options: Exclude<EaseOption, null>[] = [
-    'Very Easy',
-    'Easy',
-    'Difficult',
     'Very Difficult',
+    'Difficult',
+    'Easy',
+    'Very Easy',
   ];
 
   const maxLength = 500;
