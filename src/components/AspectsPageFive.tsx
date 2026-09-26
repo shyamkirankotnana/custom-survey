@@ -100,7 +100,9 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
 
   const maxLength = 500;
   const minLength = 20;
+  const isQ3Complete = aspectItems.length === Object.keys(ratings).length;
   const isQ4Valid = q4FeedbackText.length === 0 || q4FeedbackText.length >= minLength;
+  const isValidToSubmit = isQ3Complete && isQ4Valid;
 
   return (
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary overflow-hidden h-full">
@@ -229,9 +231,9 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
         <button
           type="button"
           onClick={onFinish}
-          disabled={!isQ4Valid}
+          disabled={!isValidToSubmit}
           className={`w-48 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand transition-all cursor-pointer ${
-            isQ4Valid
+            isValidToSubmit
               ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
           }`}

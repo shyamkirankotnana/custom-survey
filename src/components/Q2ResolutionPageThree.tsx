@@ -98,13 +98,13 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
             {/* Same-line aligned middle: Warning text on left, character count on right */}
             <div className="flex items-center justify-between mt-2 px-1 text-[11px] min-h-[18px]">
               <div>
-                {q2FollowUpText.length > 0 && q2FollowUpText.length < minLength && (
+                {q2FollowUpText.length < minLength && (
                   <span className="text-red-500 font-medium">Minimum {minLength} characters required</span>
                 )}
               </div>
               <span
                 className={`font-semibold ${
-                  q2FollowUpText.length > 0 && q2FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
+                  q2FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
                 }`}
               >
                 {q2FollowUpText.length} / {maxLength}
@@ -118,9 +118,9 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
           <button
             type="button"
             onClick={onNext}
-            disabled={value === null || (isDifficult && q2FollowUpText.length > 0 && !isFollowUpValid)}
+            disabled={value === null || (isDifficult && !isFollowUpValid)}
             className={`w-44 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
-              value !== null && (!isDifficult || q2FollowUpText.length === 0 || isFollowUpValid)
+              value !== null && (!isDifficult || isFollowUpValid)
                 ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
             }`}

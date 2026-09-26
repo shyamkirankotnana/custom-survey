@@ -100,13 +100,13 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
             {/* Same-line aligned middle: Warning text on left, character count on right */}
             <div className="flex items-center justify-between mt-2 px-1 text-[11px] min-h-[18px]">
               <div>
-                {q1FollowUpText.length > 0 && q1FollowUpText.length < minLength && (
+                {q1FollowUpText.length < minLength && (
                   <span className="text-red-500 font-medium">Minimum {minLength} characters required</span>
                 )}
               </div>
               <span
                 className={`font-semibold ${
-                  q1FollowUpText.length > 0 && q1FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
+                  q1FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
                 }`}
               >
                 {q1FollowUpText.length} / {maxLength}
@@ -120,9 +120,9 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
           <button
             type="button"
             onClick={onNext}
-            disabled={npsScore === null || (q1FollowUpText.length > 0 && !isFollowUpValid)}
+            disabled={npsScore === null || !isFollowUpValid}
             className={`w-44 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
-              npsScore !== null && (q1FollowUpText.length === 0 || isFollowUpValid)
+              npsScore !== null && isFollowUpValid
                 ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
             }`}
