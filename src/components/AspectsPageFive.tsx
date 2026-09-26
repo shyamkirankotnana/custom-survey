@@ -60,13 +60,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     'Very Poor',
   ];
 
-  // Header display split into lines for compact columns
-  const headerLabels: Record<string, { line1: string; line2?: string }> = {
-    'Very Good': { line1: 'Very', line2: 'Good' },
-    'Good': { line1: 'Good' },
-    'Poor': { line1: 'Poor' },
-    'Very Poor': { line1: 'Very', line2: 'Poor' },
-  };
+
 
   // Option color grading based on label
   const optionColors: Record<
@@ -120,26 +114,21 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
 
         {/* Optimized Grid Table — Maximum text area on left, compact right-aligned radio option columns */}
         <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0">
-          {/* Table Header with Color Graded Option Titles */}
+          {/* Table Header with Color Graded Single-Line Option Titles (Never Wrapped) */}
           <div
             className="border-b-2 border-orange-200 bg-orange-50/90"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 40px)' }}
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 48px)' }}
           >
-            <div className="px-2.5 py-2 text-[11px] sm:text-xs font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
+            <div className="px-2 py-2 text-[11px] sm:text-xs font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
               Aspects
             </div>
             {options.map((opt) => {
               const colors = optionColors[opt];
               return (
-                <div key={opt} className="py-1.5 px-0 flex flex-col items-center justify-center text-center overflow-hidden">
-                  <span className={`text-[8.5px] sm:text-[9.5px] font-extrabold ${colors.header} leading-none whitespace-nowrap`}>
-                    {headerLabels[opt].line1}
+                <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center overflow-hidden">
+                  <span className={`text-[8.5px] sm:text-[9.5px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center`}>
+                    {opt}
                   </span>
-                  {headerLabels[opt].line2 && (
-                    <span className={`text-[8.5px] sm:text-[9.5px] font-extrabold ${colors.header} leading-none mt-0.5 whitespace-nowrap`}>
-                      {headerLabels[opt].line2}
-                    </span>
-                  )}
                 </div>
               );
             })}
@@ -161,7 +150,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                     ? 'bg-white'
                     : 'bg-gray-50/50'
                 } transition-colors`}
-                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 40px)' }}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 48px)' }}
               >
                 {/* Aspect Label — Max width so text fits in minimal lines */}
                 <div className="px-2.5 py-2 flex items-center min-h-[42px]">
