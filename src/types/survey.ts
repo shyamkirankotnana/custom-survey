@@ -14,7 +14,7 @@ export interface AspectRatingItem {
 export type AspectRating = AspectRatingItem;
 
 export interface SurveyState {
-  page: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  page: 1 | 2 | 3 | 4;
   npsScore: NpsScore;
   q1FollowUpText: string;
   resolutionEase: EaseOption;

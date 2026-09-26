@@ -1,34 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RatingOption } from '../types/survey';
 import { ArrowRight } from 'lucide-react';
 
 interface AspectsPageFiveProps {
   ratings: Record<string, RatingOption>;
   onRatingSelect: (id: string, option: RatingOption) => void;
+  q4FeedbackText: string;
+  onQ4FeedbackChange: (text: string) => void;
   onFinish: () => void;
 }
 
 export const aspectItems = [
   {
     id: 'accessibility',
-    title: 'Accessibility',
-    subtitle: '(Ability to establish contact with the RM whenever needed)',
+    title: 'Accessibility i.e being able to establish contact with the RM whenever needed',
   },
   {
     id: 'frequency',
-    title: 'Frequency / Regularity of proactively being in touch',
+    title: 'Frequency/ regularity of proactively being in touch with you',
   },
   {
     id: 'banking_knowledge',
-    title: 'Knowledge about banking related products & services',
+    title: 'Knowledge about various banking related products and services',
   },
   {
     id: 'investment_knowledge',
-    title: 'Knowledge about investment related products & services',
+    title: 'Knowledge about various investment related products and services',
   },
   {
     id: 'understanding_needs',
-    title: 'Ability to understand your financial needs & service requirements',
+    title: 'Ability to understand your financial needs/ service requirements',
   },
   {
     id: 'resolution_quality',
@@ -40,95 +41,144 @@ export const aspectItems = [
   },
   {
     id: 'rm_etiquette',
-    title: 'RM Etiquette',
-    subtitle: '(Politeness, Grooming, Corporate Attire, etc.)',
+    title: 'RM etiquette (Politeness, grooming, corporate attire etc.)',
   },
 ];
 
 export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   ratings,
   onRatingSelect,
+  q4FeedbackText,
+  onQ4FeedbackChange,
   onFinish,
 }) => {
-  // Bad to Good Order
+  // Positive to Negative order (reversed per client feedback)
   const options: Exclude<RatingOption, null>[] = [
-    'Very Poor',
-    'Poor',
-    'Good',
     'Very Good',
+    'Good',
+    'Poor',
+    'Very Poor',
   ];
+
+  const maxLength = 500;
+  const minLength = 20;
+  const isQ4Valid = q4FeedbackText.length === 0 || q4FeedbackText.length >= minLength;
 
   return (
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary overflow-hidden h-full">
       <div className="flex-1 flex flex-col min-h-0 space-y-2.5 overflow-y-auto no-scrollbar pb-2">
-        {/* Section Title */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
-          <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug">
-            Q3. Please rate the Relationship Manager on the below aspects:
+        {/* Q3 Section Title */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0">
+          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug">
+            Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
-        {/* Aspect Cards List */}
-        <div className="space-y-2.5 flex-1">
+        {/* Grid Table Layout */}
+        <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0">
+          {/* Table Header */}
+          <div className="grid grid-cols-[1fr_repeat(4,_minmax(0,_1fr))] border-b border-gray-200 bg-orange-50">
+            <div className="p-2 sm:p-3 text-xs sm:text-sm font-bold text-textPrimary flex items-center">
+              Aspects
+            </div>
+            {options.map((opt) => (
+              <div key={opt} className="p-1.5 sm:p-2 text-center flex items-center justify-center">
+                <span className="text-[9px] sm:text-[11px] font-bold text-orange-700 whitespace-nowrap leading-tight">
+                  {opt}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Table Rows */}
           {aspectItems.map((item, idx) => {
             const selected = ratings[item.id] || null;
+            const isEvenRow = idx % 2 === 0;
 
             return (
               <div
                 key={item.id}
-                className={`bg-white rounded-xl p-2.5 shadow-sm border transition-all ${
-                  selected ? 'border-emerald-500/40 bg-emerald-50/10' : 'border-bankBorder'
+                className={`grid grid-cols-[1fr_repeat(4,_minmax(0,_1fr))] border-b border-gray-100 last:border-b-0 ${
+                  isEvenRow ? 'bg-white' : 'bg-gray-50/50'
                 }`}
               >
-                <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <h3 className="text-xs font-bold text-textPrimary leading-snug">
-                    <span className="text-emerald-700 font-extrabold mr-1">{String.fromCharCode(97 + idx)}.</span>
+                {/* Aspect Label (LHS) */}
+                <div className="p-2 sm:p-3 flex items-center">
+                  <span className="text-[11px] sm:text-xs text-textPrimary leading-snug font-medium">
                     {item.title}
-                  </h3>
+                  </span>
                 </div>
 
-                {item.subtitle && (
-                  <p className="text-[11px] text-textSecondary italic mb-2 font-medium">
-                    {item.subtitle}
-                  </p>
-                )}
-
-                {/* Rating Buttons Row - Bad to Good, Uniform Clean Styling, No Border Touching */}
-                <div className="grid grid-cols-4 gap-1 w-full mt-1.5">
-                  {options.map((opt) => {
-                    const isSelected = selected === opt;
-
-                    return (
+                {/* Radio Buttons (RHS) */}
+                {options.map((opt) => {
+                  const isSelected = selected === opt;
+                  return (
+                    <div key={opt} className="p-1.5 flex items-center justify-center">
                       <button
-                        key={opt}
                         type="button"
                         onClick={() => onRatingSelect(item.id, opt)}
-                        style={{ fontSize: 'clamp(7.5px, 2.3vw, 11.5px)' }}
-                        className={`h-8 min-[360px]:h-9 px-0.5 rounded-lg flex items-center justify-center transition-all border whitespace-nowrap leading-none cursor-pointer ${
+                        className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-all cursor-pointer flex items-center justify-center ${
                           isSelected
-                            ? 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-sm scale-[1.02]'
-                            : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                            ? 'border-orange-500 bg-orange-500'
+                            : 'border-gray-300 bg-white hover:border-orange-300'
                         }`}
+                        aria-label={`${item.title} - ${opt}`}
                       >
-                        {opt}
+                        {isSelected && (
+                          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white" />
+                        )}
                       </button>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             );
           })}
         </div>
+
+        {/* Q4 — On same screen as Q3 */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0">
+          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-3">
+            Is there any other feedback related to your Relationship Manager that you want to share?
+          </h2>
+
+          <textarea
+            rows={3}
+            maxLength={maxLength}
+            value={q4FeedbackText}
+            onChange={(e) => onQ4FeedbackChange(e.target.value)}
+            placeholder="Please enter your response here"
+            className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm text-textPrimary placeholder:text-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
+          />
+
+          <div className="flex items-center justify-end mt-2 px-1">
+            <span
+              className={`font-semibold text-[11px] ${
+                q4FeedbackText.length > 0 && q4FeedbackText.length < minLength ? 'text-red-500' : 'text-textSecondary'
+              }`}
+            >
+              {q4FeedbackText.length} / {maxLength}
+            </span>
+          </div>
+          {q4FeedbackText.length > 0 && q4FeedbackText.length < minLength && (
+            <p className="text-[11px] text-red-500 mt-1 px-1">Minimum {minLength} characters required</p>
+          )}
+        </div>
       </div>
 
-      {/* Dark Emerald Green Primary Action Button (Centered, Narrower, Always Visible) */}
+      {/* Orange CTA Button */}
       <div className="pt-2 pb-2 bg-bankBg flex justify-center flex-shrink-0 z-20 border-t border-gray-200/40">
         <button
           type="button"
           onClick={onFinish}
-          className="w-44 h-11 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand hover:bg-emerald-700 active:scale-[0.98] transition-all cursor-pointer"
+          disabled={!isQ4Valid}
+          className={`w-48 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand transition-all cursor-pointer ${
+            isQ4Valid
+              ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
+          }`}
         >
-          <span>Next</span>
+          <span>Finish & Submit</span>
           <ArrowRight className="w-4 h-4 stroke-[2.5]" />
         </button>
       </div>

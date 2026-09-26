@@ -8,14 +8,14 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#059669',
-          hover: '#047857',
-          light: '#ECFDF5',
-          ring: '#6EE7B7'
+          DEFAULT: '#F97316',
+          hover: '#EA580C',
+          light: '#FFF7ED',
+          ring: '#FDBA74'
         },
         success: {
-          DEFAULT: '#10B981',
-          light: '#F0FDF4'
+          DEFAULT: '#F97316',
+          light: '#FFF7ED'
         },
         bankBg: '#F6F7FB',
         bankCard: '#FFFFFF',
@@ -30,7 +30,7 @@ export default {
         'card': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
         'card-hover': '0 8px 30px -4px rgba(0, 0, 0, 0.08)',
         'floating': '0 -4px 25px rgba(0, 0, 0, 0.08)',
-        'brand': '0 4px 14px 0 rgba(5, 150, 105, 0.35)',
+        'brand': '0 4px 14px 0 rgba(249, 115, 22, 0.35)',
       }
     },
   },

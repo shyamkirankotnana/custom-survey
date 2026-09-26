@@ -5,32 +5,41 @@ import { ArrowRight } from 'lucide-react';
 interface Q2ResolutionPageThreeProps {
   value: EaseOption;
   onChange: (option: EaseOption) => void;
+  q2FollowUpText: string;
+  onQ2FollowUpChange: (text: string) => void;
   onNext: () => void;
 }
 
 export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
   value,
   onChange,
+  q2FollowUpText,
+  onQ2FollowUpChange,
   onNext,
 }) => {
-  // Bad to Good Order (As requested by user & screenshot)
+  // Positive to Negative order (reversed per client feedback)
   const options: Exclude<EaseOption, null>[] = [
-    'Very Difficult',
-    'Difficult',
-    'Easy',
     'Very Easy',
+    'Easy',
+    'Difficult',
+    'Very Difficult',
   ];
+
+  const maxLength = 500;
+  const minLength = 20;
+  const isDifficult = value === 'Difficult' || value === 'Very Difficult';
+  const isFollowUpValid = q2FollowUpText.length >= minLength;
 
   return (
     <div className="p-3 sm:p-4 bg-bankBg text-textPrimary flex flex-col items-center w-full">
-      <div className="w-full max-w-md space-y-4">
-        {/* Question 2 Card */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder">
-          <h2 className="text-xs sm:text-sm font-bold text-textPrimary leading-snug mb-3">
-            Q2. How easy was it for you to get a resolution from your Bank Relationship Manager for your query / transaction?
+      <div className="w-full max-w-md space-y-3">
+        {/* CES Question Card */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder">
+          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-4">
+            How easy was it for you to get a resolution from your ICICI Bank Relationship Manager for your query / transaction?
           </h2>
 
-          {/* Option Pills - Bad to Good Order, Uniform Styling, Fluid Font Scaling */}
+          {/* Option Pills — Positive to Negative */}
           <div className="grid grid-cols-4 gap-1 w-full my-2">
             {options.map((opt) => {
               const isSelected = value === opt;
@@ -40,10 +49,10 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
                   key={opt}
                   type="button"
                   onClick={() => onChange(opt)}
-                  style={{ fontSize: 'clamp(7.5px, 2.3vw, 11.5px)' }}
-                  className={`h-9 sm:h-10 px-0.5 rounded-xl font-medium transition-all border whitespace-nowrap leading-none flex items-center justify-center cursor-pointer ${
+                  style={{ fontSize: 'clamp(8px, 2.4vw, 12px)' }}
+                  className={`h-10 sm:h-11 px-0.5 rounded-xl font-medium transition-all border whitespace-nowrap leading-none flex items-center justify-center cursor-pointer ${
                     isSelected
-                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-md scale-[1.02] font-extrabold'
+                      ? 'bg-orange-500 text-white border-orange-500 shadow-md scale-[1.02] font-extrabold'
                       : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                   }`}
                 >
@@ -54,15 +63,46 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
           </div>
         </div>
 
-        {/* Dark Emerald Green Primary Action Button (Positioned Directly Below Card) */}
+        {/* Inline Follow-up for Difficult/Very Difficult (same screen) */}
+        {isDifficult && (
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder">
+            <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-3">
+              What could have made the recent interaction with your ICICI Bank Relationship Manager easier? Could you please explain with an example?
+            </h2>
+
+            <textarea
+              rows={3}
+              maxLength={maxLength}
+              value={q2FollowUpText}
+              onChange={(e) => onQ2FollowUpChange(e.target.value)}
+              placeholder="Please enter your response here"
+              className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm text-textPrimary placeholder:text-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
+            />
+
+            <div className="flex items-center justify-end mt-2 px-1">
+              <span
+                className={`font-semibold text-[11px] ${
+                  q2FollowUpText.length > 0 && q2FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
+                }`}
+              >
+                {q2FollowUpText.length} / {maxLength}
+              </span>
+            </div>
+            {q2FollowUpText.length > 0 && q2FollowUpText.length < minLength && (
+              <p className="text-[11px] text-red-500 mt-1 px-1">Minimum {minLength} characters required</p>
+            )}
+          </div>
+        )}
+
+        {/* Orange CTA Button */}
         <div className="pt-2 flex justify-center w-full">
           <button
             type="button"
             onClick={onNext}
-            disabled={value === null}
+            disabled={value === null || (isDifficult && q2FollowUpText.length > 0 && !isFollowUpValid)}
             className={`w-44 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
-              value !== null
-                ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.98]'
+              value !== null && (!isDifficult || q2FollowUpText.length === 0 || isFollowUpValid)
+                ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
             }`}
           >

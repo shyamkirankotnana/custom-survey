@@ -9,8 +9,8 @@ const mulish = Mulish({
 });
 
 export const metadata: Metadata = {
-  title: 'Banking Mobile Customer Feedback Survey',
-  description: 'Production-quality, mobile-first banking customer feedback survey application.',
+  title: 'ICICI Bank Relationship Manager Survey',
+  description: 'ICICI Bank Relationship Manager customer feedback survey.',
 };
 
 export default function RootLayout({

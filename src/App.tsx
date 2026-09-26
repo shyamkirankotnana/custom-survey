@@ -3,19 +3,18 @@
 import React, { useState } from 'react';
 import { IciciHeader } from './components/IciciHeader';
 import { NpsPageOne } from './components/NpsPageOne';
-import { Q1FollowUpPageTwo } from './components/Q1FollowUpPageTwo';
 import { Q2ResolutionPageThree } from './components/Q2ResolutionPageThree';
-import { Q2FollowUpPageFour } from './components/Q2FollowUpPageFour';
 import { AspectsPageFive } from './components/AspectsPageFive';
-import { Q4FeedbackPageSix } from './components/Q4FeedbackPageSix';
 import { SuccessPageThree } from './components/SuccessPageThree';
-import { DeviceSimulator } from './components/DeviceSimulator';
-import { HeaderBanner } from './components/HeaderBanner';
-import { DeviceWidth, SurveyState, RatingOption, EaseOption } from './types/survey';
+import { SurveyState, RatingOption, EaseOption } from './types/survey';
+
+// Simplified page flow:
+// Page 1: NPS + inline follow-up (Q1 + Q1a/Q1b on same screen)
+// Page 2: CES + inline follow-up (Q2 + Q2a on same screen)
+// Page 3: Aspect Ratings + Q4 Feedback (Q3 + Q4 on same screen)
+// Page 4: Success
 
 export const App: React.FC = () => {
-  const [deviceWidth, setDeviceWidth] = useState<DeviceWidth>('390px');
-
   const [surveyState, setSurveyState] = useState<SurveyState>({
     page: 1,
     npsScore: null,
@@ -53,57 +52,28 @@ export const App: React.FC = () => {
     setSurveyState((prev) => ({ ...prev, q4FeedbackText: text }));
   };
 
-  // Next Handlers
+  // Next Handlers (simplified 3-screen flow)
   const handleNextFromQ1 = () => {
     if (surveyState.npsScore === null) return;
-    setSurveyState((prev) => ({ ...prev, page: 2 }));
-  };
-
-  const handleNextFromQ1FollowUp = () => {
-    setSurveyState((prev) => ({ ...prev, page: 3 }));
+    setSurveyState((prev) => ({ ...prev, page: 2 as SurveyState['page'] }));
   };
 
   const handleNextFromQ2 = () => {
     if (surveyState.resolutionEase === null) return;
-    const isDifficult =
-      surveyState.resolutionEase === 'Difficult' ||
-      surveyState.resolutionEase === 'Very Difficult';
-
-    if (isDifficult) {
-      setSurveyState((prev) => ({ ...prev, page: 4 }));
-    } else {
-      setSurveyState((prev) => ({ ...prev, page: 5 }));
-    }
-  };
-
-  const handleNextFromQ2FollowUp = () => {
-    setSurveyState((prev) => ({ ...prev, page: 5 }));
-  };
-
-  const handleNextFromAspects = () => {
-    setSurveyState((prev) => ({ ...prev, page: 6 }));
+    setSurveyState((prev) => ({ ...prev, page: 3 as SurveyState['page'] }));
   };
 
   const handleFinish = () => {
-    setSurveyState((prev) => ({ ...prev, page: 7 }));
+    setSurveyState((prev) => ({ ...prev, page: 4 as SurveyState['page'] }));
   };
 
-  // Back Handler with Logical Branching reversal
+  // Back Handler
   const handleBackPage = () => {
-    const { page, resolutionEase } = surveyState;
-
+    const { page } = surveyState;
     if (page === 2) {
-      setSurveyState((prev) => ({ ...prev, page: 1 }));
+      setSurveyState((prev) => ({ ...prev, page: 1 as SurveyState['page'] }));
     } else if (page === 3) {
-      setSurveyState((prev) => ({ ...prev, page: 2 }));
-    } else if (page === 4) {
-      setSurveyState((prev) => ({ ...prev, page: 3 }));
-    } else if (page === 5) {
-      const isDifficult =
-        resolutionEase === 'Difficult' || resolutionEase === 'Very Difficult';
-      setSurveyState((prev) => ({ ...prev, page: isDifficult ? 4 : 3 }));
-    } else if (page === 6) {
-      setSurveyState((prev) => ({ ...prev, page: 5 }));
+      setSurveyState((prev) => ({ ...prev, page: 2 as SurveyState['page'] }));
     }
   };
 
@@ -119,129 +89,72 @@ export const App: React.FC = () => {
     });
   };
 
-  // Compute Clean Progress Percentage
+  // Progress percentage for 3 screens
   const getProgressPercentage = () => {
     switch (surveyState.page) {
-      case 1:
-        return 16;
-      case 2:
-        return 33;
-      case 3:
-        return 50;
-      case 4:
-        return 66;
-      case 5:
-        return 83;
-      case 6:
-        return 98;
-      default:
-        return undefined;
+      case 1: return 33;
+      case 2: return 66;
+      case 3: return 95;
+      default: return undefined;
     }
   };
 
   const progressPercentage = getProgressPercentage();
 
   return (
-    <DeviceSimulator deviceWidth={deviceWidth}>
-      {/* Device Switcher Bar */}
-      <HeaderBanner
-        currentDeviceWidth={deviceWidth}
-        setDeviceWidth={setDeviceWidth}
-      />
-
-      {/* ICICI Style Red App Header with Sleek Minimalist Progress Bar */}
+    <div className="min-h-screen min-h-[100dvh] bg-bankBg flex flex-col w-full max-w-md mx-auto sm:my-4 sm:rounded-2xl sm:shadow-lg sm:border sm:border-gray-200 overflow-hidden">
+      {/* ICICI Orange Header */}
       <IciciHeader
         onBack={handleBackPage}
-        showBack={surveyState.page > 1 && surveyState.page < 7}
-        title="Feedback"
+        showBack={surveyState.page > 1 && surveyState.page < 4}
+        title="ICICI Bank RM Survey"
         progressPercentage={progressPercentage}
       />
 
-      {/* 1 Question Per Screen Controller with Faint 'Draft Survey' Watermark */}
-      <div className="flex-1 flex flex-col min-h-0 bg-bankBg relative overflow-hidden">
-        {/* Subtle Light Grey Background Watermark Overlay */}
-        <div className="absolute inset-0 pointer-events-none select-none z-0 flex items-center justify-center overflow-hidden opacity-35">
-          <div className="text-gray-400/40 text-[11px] sm:text-xs uppercase tracking-[0.35em] font-extrabold rotate-[-25deg] whitespace-nowrap">
-            Draft Survey • Draft Survey • Draft Survey
-          </div>
-        </div>
+      {/* Screen Content */}
+      <div className="flex-1 flex flex-col min-h-0 bg-bankBg">
+        {/* Screen 1: NPS + Inline Follow-up */}
+        {surveyState.page === 1 && (
+          <NpsPageOne
+            npsScore={surveyState.npsScore}
+            onScoreSelect={handleScoreSelect}
+            q1FollowUpText={surveyState.q1FollowUpText}
+            onQ1FollowUpChange={handleQ1FollowUpChange}
+            onNext={handleNextFromQ1}
+          />
+        )}
 
-        {/* Screen Content Wrapper */}
-        <div className="relative z-10 flex-1 flex flex-col min-h-0 justify-between">
-          <div className="flex-1 flex flex-col min-h-0">
-            {/* Screen 1: Question 1 (NPS) */}
-            {surveyState.page === 1 && (
-              <NpsPageOne
-                npsScore={surveyState.npsScore}
-                onScoreSelect={handleScoreSelect}
-                onNext={handleNextFromQ1}
-              />
-            )}
+        {/* Screen 2: CES + Inline Follow-up */}
+        {surveyState.page === 2 && (
+          <Q2ResolutionPageThree
+            value={surveyState.resolutionEase}
+            onChange={handleResolutionEaseChange}
+            q2FollowUpText={surveyState.q2FollowUpText}
+            onQ2FollowUpChange={handleQ2FollowUpChange}
+            onNext={handleNextFromQ2}
+          />
+        )}
 
-            {/* Screen 2: Q1 Follow-up (Q1a if 0-8, Q1b if 9-10) */}
-            {surveyState.page === 2 && (
-              <Q1FollowUpPageTwo
-                npsScore={surveyState.npsScore}
-                value={surveyState.q1FollowUpText}
-                onChange={handleQ1FollowUpChange}
-                onNext={handleNextFromQ1FollowUp}
-              />
-            )}
+        {/* Screen 3: Aspect Ratings + Q4 Feedback */}
+        {surveyState.page === 3 && (
+          <AspectsPageFive
+            ratings={surveyState.aspectRatings}
+            onRatingSelect={handleAspectRatingSelect}
+            q4FeedbackText={surveyState.q4FeedbackText}
+            onQ4FeedbackChange={handleQ4FeedbackChange}
+            onFinish={handleFinish}
+          />
+        )}
 
-            {/* Screen 3: Question 2 (Resolution Ease) */}
-            {surveyState.page === 3 && (
-              <Q2ResolutionPageThree
-                value={surveyState.resolutionEase}
-                onChange={handleResolutionEaseChange}
-                onNext={handleNextFromQ2}
-              />
-            )}
-
-            {/* Screen 4: Q2a Follow-up (ONLY if Difficult or Very Difficult) */}
-            {surveyState.page === 4 && (
-              <Q2FollowUpPageFour
-                value={surveyState.q2FollowUpText}
-                onChange={handleQ2FollowUpChange}
-                onNext={handleNextFromQ2FollowUp}
-              />
-            )}
-
-            {/* Screen 5: Question 3 (Aspect Ratings) */}
-            {surveyState.page === 5 && (
-              <AspectsPageFive
-                ratings={surveyState.aspectRatings}
-                onRatingSelect={handleAspectRatingSelect}
-                onFinish={handleNextFromAspects}
-              />
-            )}
-
-            {/* Screen 6: Question 4 (Q4 General Open-End Feedback) */}
-            {surveyState.page === 6 && (
-              <Q4FeedbackPageSix
-                value={surveyState.q4FeedbackText}
-                onChange={handleQ4FeedbackChange}
-                onFinish={handleFinish}
-              />
-            )}
-
-            {/* Screen 7: Success / Confirmation (No Back Button, No Summary Box, No Test Button) */}
-            {surveyState.page === 7 && (
-              <SuccessPageThree
-                surveyState={surveyState}
-                onReset={handleReset}
-              />
-            )}
-          </div>
-
-          {/* Subtle Light Grey Footer Watermark Text (Non-Intrusive) */}
-          <div className="py-1 text-center flex-shrink-0 select-none pointer-events-none">
-            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gray-400/60">
-              Draft Survey
-            </span>
-          </div>
-        </div>
+        {/* Screen 4: Success */}
+        {surveyState.page === 4 && (
+          <SuccessPageThree
+            surveyState={surveyState}
+            onReset={handleReset}
+          />
+        )}
       </div>
-    </DeviceSimulator>
+    </div>
   );
 };
 
