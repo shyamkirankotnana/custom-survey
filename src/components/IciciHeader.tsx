@@ -38,11 +38,11 @@ export const IciciHeader: React.FC<IciciHeaderProps> = ({
         <div className="w-8 h-8" />
       </div>
 
-      {/* Orange Progress Bar Line */}
+      {/* Ultra-thin Orange Progress Bar Line */}
       {progressPercentage !== undefined && (
-        <div className="w-full bg-orange-200 h-1 flex-shrink-0">
+        <div className="w-full bg-gray-200/90 h-[2.5px] flex-shrink-0 relative overflow-hidden">
           <div
-            className="bg-orange-500 h-full transition-all duration-300 ease-out"
+            className="bg-orange-500 h-full transition-all duration-300 ease-out shadow-sm"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>

@@ -87,18 +87,18 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
           {/* Table Header */}
           <div
             className="border-b-2 border-orange-200 bg-orange-50/90"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 34px)' }}
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 40px)' }}
           >
-            <div className="px-2.5 py-2 text-[11px] sm:text-xs font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
+            <div className="px-2.5 py-2 text-[11px] sm:text-xs font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
               Aspects
             </div>
             {options.map((opt) => (
-              <div key={opt} className="py-1.5 px-0.5 flex flex-col items-center justify-center text-center">
-                <span className="text-[8px] sm:text-[9px] font-extrabold text-orange-800 leading-none">
+              <div key={opt} className="py-1.5 px-0 flex flex-col items-center justify-center text-center overflow-hidden">
+                <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-orange-800 leading-none whitespace-nowrap">
                   {headerLabels[opt].line1}
                 </span>
                 {headerLabels[opt].line2 && (
-                  <span className="text-[8px] sm:text-[9px] font-extrabold text-orange-800 leading-none mt-0.5">
+                  <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-orange-800 leading-none mt-0.5 whitespace-nowrap">
                     {headerLabels[opt].line2}
                   </span>
                 )}
@@ -117,7 +117,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                 className={`border-b border-gray-100 last:border-b-0 ${
                   isEvenRow ? 'bg-white' : 'bg-gray-50/50'
                 } ${selected ? 'bg-orange-50/40' : ''} transition-colors`}
-                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 34px)' }}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 40px)' }}
               >
                 {/* Aspect Label — Max width so text fits in minimal lines */}
                 <div className="px-2.5 py-2 flex items-center min-h-[42px]">
