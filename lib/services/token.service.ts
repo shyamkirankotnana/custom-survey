@@ -161,7 +161,7 @@ export const tokenService = {
   },
 
   /**
-   * Batch generate NanoIDs and store into survey_tokens
+   * Batch generate survey links and store into survey_tokens
    */
   async generateBatch(count: number = 100) {
     const records = Array.from({ length: count }).map(() => ({

@@ -47,20 +47,23 @@ export default function AdminTokensPage() {
     }
   };
 
-  const handleGenerate100 = async () => {
+  const [batchCount, setBatchCount] = useState<number>(1);
+
+  const handleGenerate = async (countOverride?: number) => {
+    const countToGenerate = countOverride || batchCount || 1;
     setIsGenerating(true);
     setNotification(null);
     try {
       const res = await fetch('/api/admin/tokens/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ count: 100 }),
+        body: JSON.stringify({ count: countToGenerate }),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Generation failed');
 
-      setNotification(`Successfully generated 100 NanoID tokens!`);
+      setNotification(`Successfully generated ${countToGenerate} survey link${countToGenerate > 1 ? 's' : ''}!`);
       await loadTokens();
     } catch (err: any) {
       setNotification(`Error: ${err?.message || 'Failed to generate tokens'}`);
@@ -81,42 +84,82 @@ export default function AdminTokensPage() {
     <main className="min-h-screen bg-gray-50 p-4 sm:p-8 font-sans text-gray-900">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Top Title Bar */}
-        <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <div className="p-3 bg-orange-500 rounded-xl">
               <KeyRound className="w-7 h-7 text-white" />
             </div>
             <div>
               <h1 className="text-xl font-bold">Admin Token Generator</h1>
-              <p className="text-xs text-gray-400">NanoID Link Engine & Access Management</p>
+              <p className="text-xs text-gray-400">Survey Link Engine & Access Management</p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 w-full sm:w-auto">
-            <button
-              onClick={handleGenerate100}
-              disabled={isGenerating}
-              className="flex-1 sm:flex-none px-5 py-2.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-extrabold text-sm rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md disabled:opacity-50 cursor-pointer"
-            >
-              {isGenerating ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Generating...</span>
-                </>
-              ) : (
-                <>
-                  <PlusCircle className="w-4 h-4" />
-                  <span>Generate 100 Tokens</span>
-                </>
-              )}
-            </button>
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            {/* Batch Count Input & Button */}
+            <div className="flex items-center bg-gray-800 rounded-xl p-1 border border-gray-700">
+              <span className="text-[11px] font-bold text-gray-400 px-2.5">Qty:</span>
+              <input
+                type="number"
+                min="1"
+                max="1000"
+                value={batchCount}
+                onChange={(e) => setBatchCount(Math.max(1, parseInt(e.target.value) || 1))}
+                className="w-16 bg-gray-900 text-white text-xs font-bold px-2 py-1.5 rounded-lg border border-gray-700 text-center focus:outline-none focus:border-orange-500"
+              />
+              <button
+                onClick={() => handleGenerate()}
+                disabled={isGenerating}
+                className="ml-1.5 px-4 py-1.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-extrabold text-xs rounded-lg flex items-center space-x-1.5 transition-all shadow-md disabled:opacity-50 cursor-pointer"
+              >
+                {isGenerating ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Generating...</span>
+                  </>
+                ) : (
+                  <>
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    <span>Generate</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Quick Presets */}
+            <div className="flex items-center space-x-1 bg-gray-800/80 p-1 rounded-xl border border-gray-700/60">
+              <button
+                onClick={() => handleGenerate(1)}
+                disabled={isGenerating}
+                className="px-2.5 py-1.5 bg-gray-700 hover:bg-gray-600 text-white font-bold text-[11px] rounded-lg transition-all cursor-pointer"
+                title="Generate 1 Token"
+              >
+                +1
+              </button>
+              <button
+                onClick={() => handleGenerate(10)}
+                disabled={isGenerating}
+                className="px-2.5 py-1.5 bg-gray-700 hover:bg-gray-600 text-white font-bold text-[11px] rounded-lg transition-all cursor-pointer"
+                title="Generate 10 Tokens"
+              >
+                +10
+              </button>
+              <button
+                onClick={() => handleGenerate(100)}
+                disabled={isGenerating}
+                className="px-2.5 py-1.5 bg-gray-700 hover:bg-gray-600 text-white font-bold text-[11px] rounded-lg transition-all cursor-pointer"
+                title="Generate 100 Tokens"
+              >
+                +100
+              </button>
+            </div>
 
             <button
               onClick={handleDownloadCSV}
-              className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 active:scale-95 text-white font-bold text-sm rounded-xl flex items-center space-x-2 transition-all border border-gray-700 cursor-pointer"
+              className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 active:scale-95 text-white font-bold text-xs rounded-xl flex items-center space-x-2 transition-all border border-gray-700 cursor-pointer"
               title="Download token,url CSV file"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-3.5 h-3.5" />
               <span>Export CSV</span>
             </button>
           </div>
@@ -182,7 +225,7 @@ export default function AdminTokensPage() {
               <KeyRound className="w-8 h-8 text-gray-300 mx-auto" />
               <p className="text-sm font-semibold text-gray-600">No tokens generated yet.</p>
               <p className="text-xs text-gray-400">
-                Click <strong>"Generate 100 Tokens"</strong> to create your first batch of NanoIDs.
+                Click <strong>"Generate"</strong> or use the <strong>+1 / +10 / +100</strong> preset buttons to create your survey links.
               </p>
             </div>
           ) : (

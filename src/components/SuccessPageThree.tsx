@@ -27,15 +27,11 @@ export const SuccessPageThree: React.FC<SuccessPageThreeProps> = () => {
   return (
     <div className="flex-1 flex flex-col justify-between p-5 bg-bankBg text-center">
       <div className="my-auto space-y-4 max-w-sm mx-auto w-full">
-        <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-2 border-4 border-orange-50 shadow-inner">
+        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2 border-4 border-emerald-50 shadow-inner">
           <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
         </div>
 
-        <span className="inline-flex items-center gap-1 bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs font-bold border border-orange-200">
-          <ShieldCheck className="w-3.5 h-3.5" /> Feedback Submitted
-        </span>
-
-        <h2 className="text-xl sm:text-2xl font-extrabold text-textPrimary tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
           Thank you for your valuable response.
         </h2>
       </div>

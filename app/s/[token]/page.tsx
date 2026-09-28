@@ -77,21 +77,14 @@ export default async function SurveyTokenPage({ params }: PageProps) {
   if (validation.status === 'completed') {
     return (
       <main className="min-h-screen bg-bankBg flex flex-col items-center justify-center p-4 font-sans text-textPrimary">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-bankBorder p-8 text-center space-y-5">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-full">
-            <Clock className="w-8 h-8 text-blue-600" />
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-bankBorder p-8 text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full mx-auto">
+            <CheckCircle2 className="w-10 h-10 text-emerald-600" />
           </div>
 
-          <div className="space-y-2">
-            <h1 className="text-xl font-bold text-gray-900">Survey Already Completed</h1>
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-              This survey link (<code className="font-mono font-bold text-gray-800">{token}</code>) has already been completed. Thank you for your valuable feedback!
-            </p>
-          </div>
-
-          <div className="pt-4 border-t border-gray-100 text-xs text-gray-400">
-            If you believe this is an error, please contact ICICI Bank support.
-          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+            Thanks for completing the survey!
+          </h1>
         </div>
       </main>
     );
@@ -100,21 +93,14 @@ export default async function SurveyTokenPage({ params }: PageProps) {
   // CASE 3: Token Invalid or Expired
   return (
     <main className="min-h-screen bg-bankBg flex flex-col items-center justify-center p-4 font-sans text-textPrimary">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-bankBorder p-8 text-center space-y-5">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-red-50 text-red-600 rounded-full">
-          <AlertCircle className="w-8 h-8 text-red-600" />
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-bankBorder p-8 text-center space-y-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-red-50 text-red-600 rounded-full mx-auto">
+          <AlertCircle className="w-10 h-10 text-red-600" />
         </div>
 
-        <div className="space-y-2">
-          <h1 className="text-xl font-bold text-gray-900">Invalid Survey Link</h1>
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-            The survey link (<code className="font-mono font-bold text-red-600">{token}</code>) is invalid, expired, or no longer available.
-          </p>
-        </div>
-
-        <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-medium">
-          Please check the URL or request a new survey invitation link.
-        </div>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+          Invalid survey link.
+        </h1>
       </div>
     </main>
   );

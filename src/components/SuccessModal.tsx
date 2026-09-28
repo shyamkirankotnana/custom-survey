@@ -43,13 +43,9 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
           <ShieldCheck className="w-3.5 h-3.5" /> Response Submitted
         </span>
 
-        <h3 className="text-xl font-extrabold text-textPrimary mb-2 tracking-tight">
-          Thank You For Your Feedback!
+        <h3 className="text-xl font-extrabold text-textPrimary mb-4 tracking-tight">
+          Thanks for completing the survey!
         </h3>
-
-        <p className="text-xs text-textSecondary leading-relaxed mb-4">
-          Your valuable insights help us elevate our relationship banking services and deliver exceptional experiences.
-        </p>
 
         {/* Reference Receipt Card */}
         <div className="bg-gray-50 rounded-2xl p-4 border border-gray-200/80 mb-5 text-left space-y-2">

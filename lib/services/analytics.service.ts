@@ -56,8 +56,31 @@ export const analyticsService = {
    */
   async getFunnelMetrics() {
     try {
+      const { data, error } = await supabase
+        .from('vw_funnel_summary')
+        .select('*')
+        .maybeSingle();
+
+      if (!error && data) {
+        const genCount = Number(data.generated) || 0;
+        const openCount = Number(data.opened) || 0;
+        const compCount = Number(data.completed) || 0;
+
+        const openRate = genCount > 0 ? Math.round((openCount / genCount) * 100) : 0;
+        const completionRate = openCount > 0 ? Math.round((compCount / openCount) * 100) : 0;
+
+        return {
+          generated_links: genCount,
+          opened_links: openCount,
+          completed_responses: compCount,
+          open_rate: openRate,
+          completion_rate: completionRate,
+        };
+      }
+
+      // Fallback if view doesn't exist yet
       const { count: generatedLinks } = await supabase.from('survey_tokens').select('*', { count: 'exact', head: true });
-      const { count: openedLinks } = await supabase.from('survey_tokens').select('*', { count: 'exact', head: true }).eq('status', 'opened');
+      const { count: openedLinks } = await supabase.from('survey_tokens').select('*', { count: 'exact', head: true }).in('status', ['opened', 'completed']);
       const { count: completedResponses } = await supabase.from('survey_tokens').select('*', { count: 'exact', head: true }).eq('status', 'completed');
 
       const genCount = generatedLinks || 0;
