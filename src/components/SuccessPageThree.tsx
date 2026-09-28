@@ -36,7 +36,7 @@ export const SuccessPageThree: React.FC<SuccessPageThreeProps> = () => {
         </span>
 
         <h2 className="text-xl sm:text-2xl font-extrabold text-textPrimary tracking-tight">
-          Thank you for your valuable response
+          Thank you for your valuable response.
         </h2>
       </div>
     </div>
