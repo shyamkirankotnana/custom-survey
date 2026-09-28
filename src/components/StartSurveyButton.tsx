@@ -23,8 +23,8 @@ export const StartSurveyButton: React.FC<StartSurveyButtonProps> = ({ token }) =
     } catch (err) {
       console.error('Error updating token status:', err);
     } finally {
-      // Navigate to the main survey app with token parameter
-      router.push(`/?token=${encodeURIComponent(token)}`);
+      // Clean RESTful route navigation to /s/[token]/survey
+      router.push(`/s/${encodeURIComponent(token)}/survey`);
     }
   };
 

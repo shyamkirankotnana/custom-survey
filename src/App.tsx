@@ -14,7 +14,11 @@ import { SurveyState, RatingOption, EaseOption } from './types/survey';
 // Page 3: Aspect Ratings + Q4 Feedback (Q3 + Q4 on same screen)
 // Page 4: Success
 
-export const App: React.FC = () => {
+interface AppProps {
+  token?: string;
+}
+
+export const App: React.FC<AppProps> = ({ token }) => {
   const [surveyState, setSurveyState] = useState<SurveyState>({
     page: 1,
     npsScore: null,
@@ -76,6 +80,7 @@ export const App: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          token: token || undefined,
           npsScore: surveyState.npsScore,
           q1FollowUpText: surveyState.q1FollowUpText,
           resolutionEase: surveyState.resolutionEase,
