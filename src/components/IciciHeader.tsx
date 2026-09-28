@@ -11,13 +11,13 @@ interface IciciHeaderProps {
 export const IciciHeader: React.FC<IciciHeaderProps> = ({
   onBack,
   showBack = true,
-  title = 'ICICI Bank RM Survey',
+  title = 'ICICI Bank Relationship Manager Survey',
   progressPercentage,
 }) => {
   return (
     <div className="flex flex-col flex-shrink-0 relative z-20 border-b border-orange-700">
       {/* ICICI Orange Header Bar */}
-      <div className="bg-orange-600 text-white px-4 py-3 flex items-center justify-between shadow-sm">
+      <div className="bg-orange-600 text-white px-3 sm:px-4 py-3 flex items-center justify-between shadow-sm">
         <div className="w-8 h-8 flex items-center justify-start">
           {showBack && onBack && (
             <button
@@ -31,7 +31,7 @@ export const IciciHeader: React.FC<IciciHeaderProps> = ({
           )}
         </div>
 
-        <h1 className="text-base font-bold tracking-tight text-white text-center flex-1">
+        <h1 className="text-base sm:text-lg font-bold tracking-tight text-white text-center flex-1 leading-snug px-1">
           {title}
         </h1>
 

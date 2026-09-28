@@ -99,36 +99,33 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   };
 
   const maxLength = 500;
-  const minLength = 20;
   const isQ3Complete = aspectItems.length === Object.keys(ratings).length;
-  const isQ4Valid = q4FeedbackText.length === 0 || q4FeedbackText.length >= minLength;
-  const isValidToSubmit = isQ3Complete && isQ4Valid;
 
   return (
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary overflow-hidden h-full">
-      <div className="flex-1 flex flex-col min-h-0 space-y-2.5 overflow-y-auto no-scrollbar pb-2">
+      <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2">
         {/* Q3 Section Title */}
-        <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
-          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug">
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
+          <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">
             Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
-        {/* Optimized Grid Table — Maximum text area on left, compact right-aligned radio option columns */}
-        <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0">
-          {/* Table Header with Color Graded Single-Line Option Titles (Never Wrapped) */}
+        {/* Optimized Grid Table — Sticky Header Freeze just like top row in Excel */}
+        <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0 relative">
+          {/* Frozen Sticky Table Header */}
           <div
-            className="border-b-2 border-orange-200 bg-orange-50/90"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 48px)' }}
+            className="sticky top-0 z-10 border-b-2 border-orange-200 bg-orange-50 shadow-sm"
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 52px)' }}
           >
-            <div className="px-2 py-2 text-[11px] sm:text-xs font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
+            <div className="px-2.5 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
               Aspects
             </div>
             {options.map((opt) => {
               const colors = optionColors[opt];
               return (
                 <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center overflow-hidden">
-                  <span className={`text-[8.5px] sm:text-[9.5px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center`}>
+                  <span className={`text-[9.5px] sm:text-[11px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center`}>
                     {opt}
                   </span>
                 </div>
@@ -152,11 +149,11 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                     ? 'bg-white'
                     : 'bg-gray-50/50'
                 } transition-colors`}
-                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 48px)' }}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 52px)' }}
               >
-                {/* Aspect Label — Max width so text fits in minimal lines */}
-                <div className="px-2.5 py-2 flex items-center min-h-[42px]">
-                  <span className="text-[11px] sm:text-xs text-textPrimary leading-snug font-medium">
+                {/* Aspect Label — Increased font size */}
+                <div className="px-2.5 py-2.5 flex items-center min-h-[44px]">
+                  <span className="text-xs sm:text-sm text-textPrimary leading-snug font-semibold">
                     {item.title}
                   </span>
                 </div>
@@ -171,18 +168,18 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                       key={opt}
                       type="button"
                       onClick={() => onRatingSelect(item.id, opt)}
-                      className="w-full h-full min-h-[42px] flex items-center justify-center cursor-pointer group focus:outline-none"
+                      className="w-full h-full min-h-[44px] flex items-center justify-center cursor-pointer group focus:outline-none"
                       aria-label={`${item.title} - ${opt}`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
+                        className={`w-5.5 h-5.5 rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
                           isSelected
                             ? `${colors.radio} shadow-sm scale-105`
                             : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
                         }`}
                       >
                         {isSelected && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                          <div className="w-2 h-2 rounded-full bg-white" />
                         )}
                       </div>
                     </button>
@@ -193,53 +190,46 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
           })}
         </div>
 
-        {/* Q4 — On same screen as Q3 */}
-        <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
-          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-2.5">
-            Is there any other feedback related to your Relationship Manager that you want to share?
-          </h2>
+        {/* Q4 — Appears ONLY after all 8 aspects of Q3 have been rated */}
+        {isQ3Complete && (
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0 animate-fade-in">
+            <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-3">
+              Is there any other feedback related to your Relationship Manager that you want to share?
+            </h2>
 
-          <textarea
-            rows={3}
-            maxLength={maxLength}
-            value={q4FeedbackText}
-            onChange={(e) => onQ4FeedbackChange(e.target.value)}
-            placeholder="Please enter your response here"
-            className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm text-textPrimary placeholder:text-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
-          />
+            <textarea
+              rows={3}
+              maxLength={maxLength}
+              value={q4FeedbackText}
+              onChange={(e) => onQ4FeedbackChange(e.target.value)}
+              placeholder="Please enter your response here"
+              className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm sm:text-base text-textPrimary placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
+            />
 
-          {/* Same-line aligned middle: Warning text on left, character count on right */}
-          <div className="flex items-center justify-between mt-2 px-1 text-[11px] min-h-[18px]">
-            <div>
-              {q4FeedbackText.length > 0 && q4FeedbackText.length < minLength && (
-                <span className="text-red-500 font-medium">Minimum {minLength} characters required</span>
-              )}
+            {/* Q4 Footer — No minimum character requirement */}
+            <div className="flex items-center justify-end mt-2 px-1 text-xs">
+              <span className="font-semibold text-textSecondary">
+                {q4FeedbackText.length} / {maxLength}
+              </span>
             </div>
-            <span
-              className={`font-semibold ${
-                q4FeedbackText.length > 0 && q4FeedbackText.length < minLength ? 'text-red-500' : 'text-textSecondary'
-              }`}
-            >
-              {q4FeedbackText.length} / {maxLength}
-            </span>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Orange CTA Button */}
+      {/* Orange CTA Button — "Submit" */}
       <div className="pt-2 pb-2 bg-bankBg flex justify-center flex-shrink-0 z-20 border-t border-gray-200/40">
         <button
           type="button"
           onClick={onFinish}
-          disabled={!isValidToSubmit}
-          className={`w-48 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 shadow-brand transition-all cursor-pointer ${
-            isValidToSubmit
+          disabled={!isQ3Complete}
+          className={`w-48 h-12 rounded-full font-extrabold text-base flex items-center justify-center gap-2 shadow-brand transition-all cursor-pointer ${
+            isQ3Complete
               ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
           }`}
         >
-          <span>Finish & Submit</span>
-          <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          <span>Submit</span>
+          <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />
         </button>
       </div>
     </div>

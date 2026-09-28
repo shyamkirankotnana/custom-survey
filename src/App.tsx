@@ -107,7 +107,7 @@ export const App: React.FC = () => {
       <IciciHeader
         onBack={handleBackPage}
         showBack={surveyState.page > 1 && surveyState.page < 4}
-        title="ICICI Bank RM Survey"
+        title="ICICI Bank Relationship Manager Survey"
         progressPercentage={progressPercentage}
       />
 

@@ -35,8 +35,8 @@ export const SuccessPageThree: React.FC<SuccessPageThreeProps> = () => {
           <ShieldCheck className="w-3.5 h-3.5" /> Feedback Submitted
         </span>
 
-        <h2 className="text-xl font-extrabold text-textPrimary tracking-tight">
-          Thank You For Your Feedback!
+        <h2 className="text-xl sm:text-2xl font-extrabold text-textPrimary tracking-tight">
+          Thank you for your valuable response
         </h2>
       </div>
     </div>

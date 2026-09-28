@@ -48,15 +48,15 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
 
   return (
     <div className="p-3 sm:p-4 bg-bankBg text-textPrimary flex flex-col items-center w-full">
-      <div className="w-full max-w-md space-y-3">
+      <div className="w-full max-w-md space-y-3.5">
         {/* CES Question Card */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder">
-          <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-4">
+          <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-4">
             How easy was it for you to get a resolution from your ICICI Bank Relationship Manager for your query / transaction?
           </h2>
 
           {/* Option Pills — Positive to Negative with label-based color grading */}
-          <div className="grid grid-cols-4 gap-1 w-full my-2">
+          <div className="grid grid-cols-4 gap-1 sm:gap-1.5 w-full my-2.5">
             {options.map((opt) => {
               const isSelected = value === opt;
 
@@ -65,8 +65,8 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
                   key={opt}
                   type="button"
                   onClick={() => onChange(opt)}
-                  style={{ fontSize: 'clamp(8px, 2.4vw, 12px)' }}
-                  className={`h-10 sm:h-11 px-0.5 rounded-xl font-medium transition-all border whitespace-nowrap leading-none flex items-center justify-center cursor-pointer ${
+                  style={{ fontSize: 'clamp(9px, 2.8vw, 13px)' }}
+                  className={`h-11 sm:h-12 px-1 rounded-xl font-extrabold transition-all border whitespace-nowrap leading-none flex items-center justify-center cursor-pointer ${
                     isSelected
                       ? getOptionColor(opt)
                       : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
@@ -82,7 +82,7 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
         {/* Inline Follow-up for Difficult/Very Difficult (same screen) */}
         {isDifficult && (
           <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder">
-            <h2 className="text-sm sm:text-base font-bold text-textPrimary leading-snug mb-3">
+            <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-3">
               What could have made the recent interaction with your ICICI Bank Relationship Manager easier? Could you please explain with an example?
             </h2>
 
@@ -92,19 +92,19 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
               value={q2FollowUpText}
               onChange={(e) => onQ2FollowUpChange(e.target.value)}
               placeholder="Please enter your response here"
-              className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm text-textPrimary placeholder:text-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
+              className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm sm:text-base text-textPrimary placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
             />
 
-            {/* Same-line aligned middle: Warning text on left, character count on right */}
-            <div className="flex items-center justify-between mt-2 px-1 text-[11px] min-h-[18px]">
+            {/* Same-line aligned middle: Warning text on left (only when typed < 20), character count on right */}
+            <div className="flex items-center justify-between mt-2 px-1 text-xs min-h-[20px]">
               <div>
-                {q2FollowUpText.length < minLength && (
-                  <span className="text-red-500 font-medium">Minimum {minLength} characters required</span>
+                {q2FollowUpText.length > 0 && q2FollowUpText.length < minLength && (
+                  <span className="text-red-500 font-semibold">Minimum {minLength} characters required</span>
                 )}
               </div>
               <span
                 className={`font-semibold ${
-                  q2FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
+                  q2FollowUpText.length > 0 && q2FollowUpText.length < minLength ? 'text-red-500' : 'text-textSecondary'
                 }`}
               >
                 {q2FollowUpText.length} / {maxLength}
@@ -119,14 +119,14 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
             type="button"
             onClick={onNext}
             disabled={value === null || (isDifficult && !isFollowUpValid)}
-            className={`w-44 h-11 rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
+            className={`w-48 h-12 rounded-full font-extrabold text-base flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
               value !== null && (!isDifficult || isFollowUpValid)
                 ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
             }`}
           >
             <span>Next</span>
-            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+            <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />
           </button>
         </div>
       </div>
