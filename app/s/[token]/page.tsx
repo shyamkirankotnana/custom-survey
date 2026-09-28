@@ -1,6 +1,6 @@
 import { tokenService } from '@/lib/services/token.service';
-import { CheckCircle2, AlertCircle, Clock, ShieldCheck, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { CheckCircle2, AlertCircle, Clock, ShieldCheck } from 'lucide-react';
+import { StartSurveyButton } from '@/src/components/StartSurveyButton';
 
 export const revalidate = 0; // Disable static caching for dynamic token validation
 
@@ -66,13 +66,7 @@ export default async function SurveyTokenPage({ params }: PageProps) {
               </p>
             </div>
 
-            <Link
-              href="/"
-              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-sm rounded-full flex items-center justify-center space-x-2 transition-all shadow-md active:scale-95"
-            >
-              <span>Start Survey</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-            </Link>
+            <StartSurveyButton token={token} />
           </div>
         </div>
       </main>
