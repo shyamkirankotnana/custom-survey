@@ -62,14 +62,6 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
 
 
 
-  // Header display split into lines so no text is EVER clipped on any screen size
-  const headerLabels: Record<string, { line1: string; line2?: string }> = {
-    'Very Good': { line1: 'Very', line2: 'Good' },
-    'Good': { line1: 'Good' },
-    'Poor': { line1: 'Poor' },
-    'Very Poor': { line1: 'Very', line2: 'Poor' },
-  };
-
   // Option color grading based on label
   const optionColors: Record<
     string,
@@ -111,7 +103,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
 
   return (
     <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary overflow-hidden h-full">
-      <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2">
+      <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2 relative">
         {/* Q3 Section Title */}
         <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
           <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">
@@ -120,28 +112,22 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
         </div>
 
         {/* Optimized Grid Table — Sticky Header Freeze just like top row in Excel */}
-        <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0 relative">
-          {/* Frozen Sticky Table Header — Compact 44px columns prevent right clipping */}
+        <div className="bg-white rounded-2xl shadow-card border border-bankBorder flex-shrink-0 relative">
+          {/* Frozen Sticky Table Header — Single-line headers (Never Wrapped), Frozen at sticky top-0 */}
           <div
-            className="sticky top-0 z-10 border-b-2 border-orange-200 bg-orange-50 shadow-sm"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
+            className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-sm rounded-t-2xl"
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 48px)' }}
           >
-            <div className="px-2 py-2 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
+            <div className="px-2 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
               Aspects
             </div>
             {options.map((opt) => {
               const colors = optionColors[opt];
-              const label = headerLabels[opt];
               return (
-                <div key={opt} className="py-2 px-0.5 flex flex-col items-center justify-center text-center overflow-hidden">
-                  <span className={`text-[9px] sm:text-[10.5px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center`}>
-                    {label.line1}
+                <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center overflow-hidden">
+                  <span className={`text-[9.5px] sm:text-[11px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center`}>
+                    {opt}
                   </span>
-                  {label.line2 && (
-                    <span className={`text-[9px] sm:text-[10.5px] font-extrabold ${colors.header} leading-none mt-0.5 whitespace-nowrap text-center`}>
-                      {label.line2}
-                    </span>
-                  )}
                 </div>
               );
             })}
@@ -162,11 +148,11 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                     : isEvenRow
                     ? 'bg-white'
                     : 'bg-gray-50/50'
-                } transition-colors`}
-                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
+                } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 48px)' }}
               >
                 {/* Aspect Label — Max space for aspect text */}
-                <div className="px-2 py-2 flex items-center min-h-[44px]">
+                <div className="px-2 py-2.5 flex items-center min-h-[44px]">
                   <span className="text-xs sm:text-sm text-textPrimary leading-snug font-semibold">
                     {item.title}
                   </span>
