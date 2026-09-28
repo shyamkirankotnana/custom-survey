@@ -98,7 +98,7 @@ export const tokenService = {
       // 1. Validate token & fetch token record
       const { data: tokenRecord, error: tokenErr } = await supabase
         .from('survey_tokens')
-        .select('id, status')
+        .select('id, status, opened_at')
         .eq('token', token)
         .maybeSingle();
 
@@ -130,13 +130,19 @@ export const tokenService = {
         return { success: false, error: 'Failed to save survey response to database.' };
       }
 
-      // 3. Mark token as completed
+      // 3. Mark token as completed & ensure opened_at is populated if previously null
+      const nowIso = new Date().toISOString();
+      const updatePayload: any = {
+        status: 'completed',
+        completed_at: nowIso,
+      };
+      if (!tokenRecord.opened_at) {
+        updatePayload.opened_at = nowIso;
+      }
+
       const { error: updateErr } = await supabase
         .from('survey_tokens')
-        .update({
-          status: 'completed',
-          completed_at: new Date().toISOString(),
-        })
+        .update(updatePayload)
         .eq('token', token);
 
       if (updateErr) {
