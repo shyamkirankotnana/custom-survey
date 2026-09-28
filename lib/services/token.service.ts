@@ -91,6 +91,70 @@ export const tokenService = {
   },
 
   /**
+   * Save survey response JSON and mark token as completed
+   */
+  async submitResponse(token: string, responseJson: Record<string, any>) {
+    try {
+      // 1. Validate token & fetch token record
+      const { data: tokenRecord, error: tokenErr } = await supabase
+        .from('survey_tokens')
+        .select('id, status')
+        .eq('token', token)
+        .maybeSingle();
+
+      if (tokenErr || !tokenRecord) {
+        return { success: false, error: 'Invalid or non-existent survey token.' };
+      }
+
+      if (tokenRecord.status === 'completed') {
+        return { success: false, error: 'This survey has already been completed.' };
+      }
+
+      if (tokenRecord.status === 'expired') {
+        return { success: false, error: 'This survey token has expired.' };
+      }
+
+      // 2. Insert into survey_responses table
+      const { data: responseData, error: insertErr } = await supabase
+        .from('survey_responses')
+        .insert({
+          token_id: tokenRecord.id,
+          response_json: responseJson,
+          submitted_at: new Date().toISOString(),
+        })
+        .select('id, submitted_at')
+        .single();
+
+      if (insertErr) {
+        console.error('[TokenService] Insert response error:', insertErr);
+        return { success: false, error: 'Failed to save survey response to database.' };
+      }
+
+      // 3. Mark token as completed
+      const { error: updateErr } = await supabase
+        .from('survey_tokens')
+        .update({
+          status: 'completed',
+          completed_at: new Date().toISOString(),
+        })
+        .eq('token', token);
+
+      if (updateErr) {
+        console.error('[TokenService] Update completed status error:', updateErr);
+      }
+
+      return {
+        success: true,
+        responseId: responseData.id,
+        submittedAt: responseData.submitted_at,
+      };
+    } catch (err: any) {
+      console.error('[TokenService] Unexpected error during response submission:', err);
+      return { success: false, error: err?.message || 'Error processing survey submission.' };
+    }
+  },
+
+  /**
    * Batch generate NanoIDs and store into survey_tokens
    */
   async generateBatch(count: number = 100) {

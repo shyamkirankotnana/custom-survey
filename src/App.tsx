@@ -74,19 +74,23 @@ export const App: React.FC<AppProps> = ({ token }) => {
     setIsSubmitting(true);
     setSubmitError(null);
     try {
-      const res = await fetch('/api/survey', {
+      const responsePayload = {
+        npsScore: surveyState.npsScore,
+        q1FollowUpText: surveyState.q1FollowUpText,
+        resolutionEase: surveyState.resolutionEase,
+        q2FollowUpText: surveyState.q2FollowUpText,
+        aspectRatings: surveyState.aspectRatings,
+        q4FeedbackText: surveyState.q4FeedbackText,
+      };
+
+      const res = await fetch('/api/survey/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          token: token || undefined,
-          npsScore: surveyState.npsScore,
-          q1FollowUpText: surveyState.q1FollowUpText,
-          resolutionEase: surveyState.resolutionEase,
-          q2FollowUpText: surveyState.q2FollowUpText,
-          aspectRatings: surveyState.aspectRatings,
-          q4FeedbackText: surveyState.q4FeedbackText,
+          token: token,
+          responseJson: responsePayload,
         }),
       });
 
