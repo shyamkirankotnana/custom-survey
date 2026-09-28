@@ -52,6 +52,7 @@ export default async function SurveyFormPage({ params }: PageProps) {
     );
   }
 
-  // CASE 3: Valid Token (pending or opened) -> Render Interactive Survey App
+  // CASE 3: Valid Token (pending or opened) -> Ensure token is marked as opened & render Survey App
+  await tokenService.markOpened(token);
   return <App token={token} />;
 }
