@@ -2,7 +2,7 @@ import { tokenService } from '@/lib/services/token.service';
 import { CheckCircle2, AlertCircle, Clock, ShieldCheck, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export const revalidate = 0; // Disable caching for dynamic token validation
+export const revalidate = 0; // Disable static caching for dynamic token validation
 
 interface PageProps {
   params: Promise<{ token: string }>;
@@ -10,15 +10,14 @@ interface PageProps {
 
 export default async function SurveyTokenPage({ params }: PageProps) {
   const { token } = await params;
+
+  // Read-only token validation (NO automatic state mutation on page load)
   const validation = await tokenService.validateToken(token);
 
-  // If token is valid (pending or opened), mark it as opened
+  // CASE 1: Valid Token (pending or opened) -> Load Survey Landing View
   if (validation.valid) {
-    await tokenService.markOpened(token);
-  }
+    const isPending = validation.status === 'pending';
 
-  // CASE 1: Valid Token (pending or opened) -> Load Prototype Survey View
-  if (validation.valid) {
     return (
       <main className="min-h-screen bg-bankBg flex flex-col items-center justify-center p-4 font-sans text-textPrimary">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-bankBorder overflow-hidden">
@@ -33,8 +32,14 @@ export default async function SurveyTokenPage({ params }: PageProps) {
                 <p className="text-xs text-gray-400">ICICI Bank RM Survey Platform</p>
               </div>
             </div>
-            <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full text-xs font-semibold uppercase tracking-wider">
-              {validation.status === 'pending' ? 'Opened' : validation.status}
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                isPending
+                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+              }`}
+            >
+              {validation.status}
             </span>
           </div>
 
@@ -51,14 +56,13 @@ export default async function SurveyTokenPage({ params }: PageProps) {
               </p>
             </div>
 
-            <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl text-left space-y-1.5">
-              <div className="text-xs font-bold text-orange-800 uppercase tracking-wider">
-                Phase 2 Routing Confirmation
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl text-left space-y-1.5">
+              <div className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+                Token Access Details
               </div>
-              <p className="text-xs text-orange-700">
-                ✅ Token Status: <strong className="capitalize">opened</strong> (updated from pending)<br />
-                ✅ Database Connection: <strong className="capitalize">Connected</strong><br />
-                ✅ Next Step: Ready to connect survey form!
+              <p className="text-xs text-gray-600">
+                • Current DB Status: <strong className="capitalize text-gray-900">{validation.status}</strong><br />
+                • State Transition: <span className="text-gray-500">Will update to 'opened' when respondent starts survey</span>
               </p>
             </div>
 
@@ -66,7 +70,7 @@ export default async function SurveyTokenPage({ params }: PageProps) {
               href="/"
               className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-sm rounded-full flex items-center justify-center space-x-2 transition-all shadow-md active:scale-95"
             >
-              <span>Launch Survey Interface</span>
+              <span>Start Survey</span>
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </Link>
           </div>
