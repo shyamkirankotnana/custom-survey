@@ -62,6 +62,14 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
 
 
 
+  // Header display split into lines so no text is EVER clipped on any screen size
+  const headerLabels: Record<string, { line1: string; line2?: string }> = {
+    'Very Good': { line1: 'Very', line2: 'Good' },
+    'Good': { line1: 'Good' },
+    'Poor': { line1: 'Poor' },
+    'Very Poor': { line1: 'Very', line2: 'Poor' },
+  };
+
   // Option color grading based on label
   const optionColors: Record<
     string,
@@ -113,21 +121,27 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
 
         {/* Optimized Grid Table — Sticky Header Freeze just like top row in Excel */}
         <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden flex-shrink-0 relative">
-          {/* Frozen Sticky Table Header */}
+          {/* Frozen Sticky Table Header — Compact 44px columns prevent right clipping */}
           <div
             className="sticky top-0 z-10 border-b-2 border-orange-200 bg-orange-50 shadow-sm"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 52px)' }}
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
           >
-            <div className="px-2.5 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
+            <div className="px-2 py-2 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
               Aspects
             </div>
             {options.map((opt) => {
               const colors = optionColors[opt];
+              const label = headerLabels[opt];
               return (
-                <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center overflow-hidden">
-                  <span className={`text-[9.5px] sm:text-[11px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center`}>
-                    {opt}
+                <div key={opt} className="py-2 px-0.5 flex flex-col items-center justify-center text-center overflow-hidden">
+                  <span className={`text-[9px] sm:text-[10.5px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center`}>
+                    {label.line1}
                   </span>
+                  {label.line2 && (
+                    <span className={`text-[9px] sm:text-[10.5px] font-extrabold ${colors.header} leading-none mt-0.5 whitespace-nowrap text-center`}>
+                      {label.line2}
+                    </span>
+                  )}
                 </div>
               );
             })}
@@ -149,16 +163,16 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                     ? 'bg-white'
                     : 'bg-gray-50/50'
                 } transition-colors`}
-                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 52px)' }}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
               >
-                {/* Aspect Label — Increased font size */}
-                <div className="px-2.5 py-2.5 flex items-center min-h-[44px]">
+                {/* Aspect Label — Max space for aspect text */}
+                <div className="px-2 py-2 flex items-center min-h-[44px]">
                   <span className="text-xs sm:text-sm text-textPrimary leading-snug font-semibold">
                     {item.title}
                   </span>
                 </div>
 
-                {/* Radio Buttons — Label-based color grading */}
+                {/* Radio Buttons — Clear 22px radio circles */}
                 {options.map((opt) => {
                   const isSelected = selected === opt;
                   const colors = optionColors[opt];
@@ -172,7 +186,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                       aria-label={`${item.title} - ${opt}`}
                     >
                       <div
-                        className={`w-5.5 h-5.5 rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
+                        className={`w-[22px] h-[22px] rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
                           isSelected
                             ? `${colors.radio} shadow-sm scale-105`
                             : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
