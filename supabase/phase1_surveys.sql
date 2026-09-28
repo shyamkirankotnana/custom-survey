@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.surveys (
 ALTER TABLE public.surveys ENABLE ROW LEVEL SECURITY;
 
 -- 3. Create RLS Policy allowing anonymous/public SELECT for Phase 1 testing
+DROP POLICY IF EXISTS "Allow public select on surveys" ON public.surveys;
 CREATE POLICY "Allow public select on surveys"
     ON public.surveys
     FOR SELECT
@@ -30,3 +31,6 @@ VALUES (
     'Customer feedback survey for evaluating Relationship Manager service quality.',
     'active'
 );
+
+-- 5. Display inserted record in Supabase Results tab
+SELECT * FROM public.surveys;

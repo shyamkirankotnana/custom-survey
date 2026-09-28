@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabase';
-import { CheckCircle2, AlertTriangle, Database } from 'lucide-react';
+import { supabase, isSupabaseEnvConfigured } from '@/lib/supabase';
+import { CheckCircle2, AlertTriangle, Database, KeyRound } from 'lucide-react';
 
 export const revalidate = 0; // Disable static caching for live DB validation
 
@@ -8,16 +8,20 @@ export default async function TestDbPage() {
   let errorMsg: string | null = null;
   let isConnected = false;
 
-  try {
-    const { data, error } = await supabase.from('surveys').select('*');
-    if (error) {
-      errorMsg = error.message;
-    } else {
-      surveys = data || [];
-      isConnected = true;
+  if (!isSupabaseEnvConfigured) {
+    errorMsg = 'NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY is missing or contains placeholder values.';
+  } else {
+    try {
+      const { data, error } = await supabase.from('surveys').select('*');
+      if (error) {
+        errorMsg = error.message;
+      } else {
+        surveys = data || [];
+        isConnected = true;
+      }
+    } catch (err: any) {
+      errorMsg = err?.message || 'Unknown database connection error';
     }
-  } catch (err: any) {
-    errorMsg = err?.message || 'Unknown database connection error';
   }
 
   return (
@@ -57,20 +61,34 @@ export default async function TestDbPage() {
 
         {/* Content Body */}
         <div className="p-6 space-y-6">
-          {errorMsg ? (
+          {!isSupabaseEnvConfigured ? (
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-3">
+              <div className="flex items-center space-x-2 text-amber-800 font-bold text-sm">
+                <KeyRound className="w-4.5 h-4.5 text-amber-600" />
+                <span>Environment Variables Required</span>
+              </div>
+              <p className="text-xs text-amber-900 leading-relaxed">
+                If viewing on <strong>Vercel</strong>, please add your Supabase credentials to your Vercel project:
+              </p>
+              <div className="bg-amber-100/70 p-3 rounded-lg text-xs font-mono space-y-1 text-amber-900 border border-amber-200">
+                <div>NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co</div>
+                <div>NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key</div>
+              </div>
+              <p className="text-xs text-amber-700">
+                Navigation: Vercel Dashboard → Your Project Settings → Environment Variables.
+              </p>
+            </div>
+          ) : errorMsg ? (
             <div className="p-4 bg-red-50 border border-red-200 rounded-xl space-y-2">
               <div className="flex items-center space-x-2 text-red-700 font-bold text-sm">
                 <AlertTriangle className="w-4 h-4" />
-                <span>Failed to Fetch 'surveys' Table</span>
+                <span>Failed to Query 'surveys' Table</span>
               </div>
               <p className="text-xs text-red-600 font-mono bg-red-100/50 p-2.5 rounded-lg overflow-x-auto">
                 {errorMsg}
               </p>
               <p className="text-xs text-gray-600 mt-2">
-                <strong>Next Step:</strong> Ensure you ran the SQL script in your Supabase SQL Editor:
-                <code className="ml-1 bg-gray-200 px-1.5 py-0.5 rounded text-gray-800 font-mono">
-                  supabase/phase1_surveys.sql
-                </code>
+                <strong>Solution:</strong> Run <code className="font-mono bg-gray-200 px-1 py-0.5 rounded text-gray-800">supabase/phase1_surveys.sql</code> in your Supabase SQL Editor.
               </p>
             </div>
           ) : (
@@ -90,7 +108,7 @@ export default async function TestDbPage() {
                     Connected to Supabase, but the <code className="font-mono">surveys</code> table is empty.
                   </p>
                   <p className="text-xs text-gray-500">
-                    Run <code className="font-mono text-orange-600">supabase/phase1_surveys.sql</code> in your Supabase SQL Editor to insert the initial test record.
+                    Run <code className="font-mono text-orange-600">supabase/phase1_surveys.sql</code> in your Supabase SQL Editor to insert the test record.
                   </p>
                 </div>
               ) : (
