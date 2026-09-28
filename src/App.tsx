@@ -25,6 +25,9 @@ export const App: React.FC = () => {
     q4FeedbackText: '',
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const handleScoreSelect = (score: number) => {
     setSurveyState((prev) => ({ ...prev, npsScore: score }));
   };
@@ -63,8 +66,37 @@ export const App: React.FC = () => {
     setSurveyState((prev) => ({ ...prev, page: 3 as SurveyState['page'] }));
   };
 
-  const handleFinish = () => {
-    setSurveyState((prev) => ({ ...prev, page: 4 as SurveyState['page'] }));
+  const handleFinish = async () => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch('/api/survey', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          npsScore: surveyState.npsScore,
+          q1FollowUpText: surveyState.q1FollowUpText,
+          resolutionEase: surveyState.resolutionEase,
+          q2FollowUpText: surveyState.q2FollowUpText,
+          aspectRatings: surveyState.aspectRatings,
+          q4FeedbackText: surveyState.q4FeedbackText,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to submit survey response.');
+      }
+
+      setSurveyState((prev) => ({ ...prev, page: 4 as SurveyState['page'] }));
+    } catch (err: any) {
+      console.error('[Survey Submission Error]:', err);
+      setSubmitError(err?.message || 'Submission failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Back Handler
@@ -143,6 +175,8 @@ export const App: React.FC = () => {
             q4FeedbackText={surveyState.q4FeedbackText}
             onQ4FeedbackChange={handleQ4FeedbackChange}
             onFinish={handleFinish}
+            isSubmitting={isSubmitting}
+            submitError={submitError}
           />
         )}
 

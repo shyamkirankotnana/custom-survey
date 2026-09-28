@@ -1,6 +1,6 @@
 import React from 'react';
 import { RatingOption } from '../types/survey';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 
 interface AspectsPageFiveProps {
   ratings: Record<string, RatingOption>;
@@ -8,6 +8,8 @@ interface AspectsPageFiveProps {
   q4FeedbackText: string;
   onQ4FeedbackChange: (text: string) => void;
   onFinish: () => void;
+  isSubmitting?: boolean;
+  submitError?: string | null;
 }
 
 export const aspectItems = [
@@ -51,6 +53,8 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   q4FeedbackText,
   onQ4FeedbackChange,
   onFinish,
+  isSubmitting = false,
+  submitError = null,
 }) => {
   // Positive to Negative order
   const options: Exclude<RatingOption, null>[] = [
@@ -219,19 +223,33 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
       </div>
 
       {/* Orange CTA Button — "Submit" */}
-      <div className="pt-2 pb-2 bg-bankBg flex justify-center flex-shrink-0 z-20 border-t border-gray-200/40">
+      <div className="pt-2 pb-2 bg-bankBg flex flex-col items-center justify-center flex-shrink-0 z-20 border-t border-gray-200/40">
+        {submitError && (
+          <div className="mb-2 px-3 py-1.5 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 font-semibold text-center max-w-xs">
+            {submitError}
+          </div>
+        )}
         <button
           type="button"
           onClick={onFinish}
-          disabled={!isQ3Complete}
+          disabled={!isQ3Complete || isSubmitting}
           className={`w-48 h-12 rounded-full font-extrabold text-base flex items-center justify-center gap-2 shadow-brand transition-all cursor-pointer ${
-            isQ3Complete
+            isQ3Complete && !isSubmitting
               ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
           }`}
         >
-          <span>Submit</span>
-          <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Submitting...</span>
+            </>
+          ) : (
+            <>
+              <span>Submit</span>
+              <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />
+            </>
+          )}
         </button>
       </div>
     </div>
