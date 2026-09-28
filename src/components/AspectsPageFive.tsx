@@ -102,7 +102,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   const isQ3Complete = aspectItems.length === Object.keys(ratings).length;
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary overflow-hidden h-full">
+    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary h-full">
       <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2 relative">
         {/* Q3 Section Title */}
         <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
