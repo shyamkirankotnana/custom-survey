@@ -111,14 +111,14 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
           </h2>
         </div>
 
-        {/* Section Wrapper — Extends sticky header boundary across all rows and Q4 feedback */}
-        <div className="space-y-3 relative pb-2">
-          {/* Frozen Sticky Table Header — Pinned at top-0 across ALL 8 aspect rows */}
+        {/* Dynamic Full-Height Grid Table — Sticky Header freezes at top-0 when page scrolls */}
+        <div className="bg-white rounded-2xl shadow-card border border-bankBorder relative">
+          {/* Frozen Sticky Table Header — Sticks to top-0 of page scroll container */}
           <div
-            className="sticky top-0 z-30 border-2 border-orange-200 bg-orange-50 shadow-md rounded-2xl"
+            className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-sm rounded-t-2xl"
             style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 46px)' }}
           >
-            <div className="px-2.5 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
+            <div className="px-2 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
               Aspects
             </div>
             {options.map((opt) => {
@@ -133,63 +133,61 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
             })}
           </div>
 
-          {/* Full-Height Aspect Rows Card — All 8 aspect items rendered naturally */}
-          <div className="bg-white rounded-2xl shadow-card border border-bankBorder overflow-hidden">
-            {aspectItems.map((item, idx) => {
-              const selected = ratings[item.id] || null;
-              const isEvenRow = idx % 2 === 0;
-              const selectedColor = selected ? optionColors[selected] : null;
+          {/* Full-Height Aspect Rows — All 8 aspect items rendered naturally */}
+          {aspectItems.map((item, idx) => {
+            const selected = ratings[item.id] || null;
+            const isEvenRow = idx % 2 === 0;
+            const selectedColor = selected ? optionColors[selected] : null;
 
-              return (
-                <div
-                  key={item.id}
-                  className={`border-b border-gray-100 last:border-b-0 ${
-                    selectedColor
-                      ? selectedColor.rowBg
-                      : isEvenRow
-                      ? 'bg-white'
-                      : 'bg-gray-50/50'
-                  } transition-colors`}
-                  style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 46px)' }}
-                >
-                  {/* Aspect Label — Max space for aspect text */}
-                  <div className="px-2 py-2.5 flex items-center min-h-[44px]">
-                    <span className="text-xs sm:text-sm text-textPrimary leading-snug font-semibold">
-                      {item.title}
-                    </span>
-                  </div>
-
-                  {/* Radio Buttons — Clear 22px radio circles */}
-                  {options.map((opt) => {
-                    const isSelected = selected === opt;
-                    const colors = optionColors[opt];
-
-                    return (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => onRatingSelect(item.id, opt)}
-                        className="w-full h-full min-h-[44px] flex items-center justify-center cursor-pointer group focus:outline-none"
-                        aria-label={`${item.title} - ${opt}`}
-                      >
-                        <div
-                          className={`w-[22px] h-[22px] rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
-                            isSelected
-                              ? `${colors.radio} shadow-sm scale-105`
-                              : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
-                          }`}
-                        >
-                          {isSelected && (
-                            <div className="w-2 h-2 rounded-full bg-white" />
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
+            return (
+              <div
+                key={item.id}
+                className={`border-b border-gray-100 last:border-b-0 ${
+                  selectedColor
+                    ? selectedColor.rowBg
+                    : isEvenRow
+                    ? 'bg-white'
+                    : 'bg-gray-50/50'
+                } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 46px)' }}
+              >
+                {/* Aspect Label — Max space for aspect text */}
+                <div className="px-2 py-2.5 flex items-center min-h-[44px]">
+                  <span className="text-xs sm:text-sm text-textPrimary leading-snug font-semibold">
+                    {item.title}
+                  </span>
                 </div>
-              );
-            })}
-          </div>
+
+                {/* Radio Buttons — Clear 22px radio circles */}
+                {options.map((opt) => {
+                  const isSelected = selected === opt;
+                  const colors = optionColors[opt];
+
+                  return (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => onRatingSelect(item.id, opt)}
+                      className="w-full h-full min-h-[44px] flex items-center justify-center cursor-pointer group focus:outline-none"
+                      aria-label={`${item.title} - ${opt}`}
+                    >
+                      <div
+                        className={`w-[22px] h-[22px] rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
+                          isSelected
+                            ? `${colors.radio} shadow-sm scale-105`
+                            : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="w-2 h-2 rounded-full bg-white" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
 
         {/* Q4 — Appears ONLY after all 8 aspects of Q3 have been rated */}
