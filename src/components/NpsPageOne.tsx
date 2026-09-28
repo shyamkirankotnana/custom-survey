@@ -45,37 +45,39 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
             Based on the recent interaction you had with your Relationship Manager how likely are you to recommend ICICI Bank to a friend, relative or colleague on a scale of 0 to 10?
           </h2>
 
-          {/* 0 to 10 Scale Buttons Grid with NPS Color Coding (Enlarged Size) */}
-          <div className="grid grid-cols-11 gap-1 sm:gap-1.5 w-full my-3">
-            {scores.map((score) => {
-              const isSelected = npsScore === score;
-              const colors = getNpsColor(score);
+          {/* 0 to 10 Scale Buttons Grid — Expanded container width with large, bold score numbers */}
+          <div className="-mx-1 sm:-mx-2 px-1 sm:px-2 my-3.5">
+            <div className="grid grid-cols-11 gap-0.5 sm:gap-1 w-full">
+              {scores.map((score) => {
+                const isSelected = npsScore === score;
+                const colors = getNpsColor(score);
 
-              return (
-                <button
-                  key={score}
-                  type="button"
-                  onClick={() => onScoreSelect(score)}
-                  style={{ fontSize: 'clamp(10px, 3.2vw, 16px)' }}
-                  className={`aspect-square w-full rounded-lg font-extrabold flex items-center justify-center p-0 leading-none transition-all duration-150 cursor-pointer border min-h-[36px] sm:min-h-[42px] ${
-                    isSelected
-                      ? `${colors.bg} text-white ${colors.border} shadow-md scale-[1.06] z-10`
-                      : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                  }`}
-                  aria-label={`Score ${score}`}
-                >
-                  <span className={score === 10 ? 'tracking-tighter' : ''}>{score}</span>
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={score}
+                    type="button"
+                    onClick={() => onScoreSelect(score)}
+                    style={{ fontSize: 'clamp(12px, 3.8vw, 18px)' }}
+                    className={`h-11 sm:h-12 w-full rounded-lg font-extrabold flex items-center justify-center p-0 leading-none transition-all duration-150 cursor-pointer border-2 ${
+                      isSelected
+                        ? `${colors.bg} text-white ${colors.border} shadow-md scale-[1.06] z-10`
+                        : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                    }`}
+                    aria-label={`Score ${score}`}
+                  >
+                    <span className={score === 10 ? 'tracking-tighter font-black' : 'font-black'}>{score}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Bottom Labels — positioned at edges near 0 and 10 */}
           <div className="flex items-start justify-between mt-3 text-xs sm:text-sm font-semibold text-textSecondary px-0.5">
-            <span className="text-left leading-tight text-gray-500 max-w-[110px]">
+            <span className="text-left leading-tight text-gray-600 max-w-[110px]">
               Will not at all recommend
             </span>
-            <span className="text-right leading-tight text-gray-500 max-w-[110px]">
+            <span className="text-right leading-tight text-gray-600 max-w-[110px]">
               Will definitely recommend
             </span>
           </div>
