@@ -143,6 +143,14 @@ This document serves as the master Product Requirements Document (PRD) and live 
 | **Phase 2.6 Consistent CTA Icons & Clean Text Removal** | Sep 24, 2026 | Standardized all `Next` and `Finish & Submit` buttons to use a consistent `ArrowRight` icon. Removed Q4 badge bubble and `Open End Feedback` remark. Removed footer brand module text and subtext from the final confirmation page. | Completed |
 | **Phase 2.7 Fluid Font Clamp Scaling Across All Options** | Sep 24, 2026 | Applied CSS inline fluid clamp scaling (`clamp(7.5px, 2.3vw, 11.5px)`) and optimized card padding across all question option pills (Q1 NPS, Q2 Resolution Ease, Q3 Aspect Ratings) so option text fits with generous margin clearance without touching pill borders on 320px–414px+ mobile viewports. | Completed |
 | **Phase 3.0 Next.js App Router Conversion** | Sep 24, 2026 | Converted application to Next.js App Router architecture (`app/layout.tsx`, `app/page.tsx`, `app/globals.css`) with Google Font `Mulish` optimization (`next/font/google`). Maintained 100% UI fidelity, logical branching, fluid typography, dark emerald green CTAs, and responsive device switcher. Built and verified cleanly with Next.js 15. | Completed |
+| **Phase 1 Supabase Integration** | Sep 29, 2026 | Connected Next.js to Supabase PostgreSQL database. Created `surveys` table and validated end-to-end live database connectivity on `/test-db`. | Completed |
+| **Phase 2 Token Engine & Access Validation** | Sep 29, 2026 | Installed `nanoid`. Created `survey_tokens` table with `status` (`pending`, `opened`, `completed`, `expired`) and `opened_at` tracking. Built `/admin/tokens` generator portal with 100 NanoID batch creation and CSV export (`token,url`). Implemented read-only `/s/[token]` validation & clean `/s/[token]/survey` routing. | Completed |
+| **Phase 3 Response Persistence & Submission Engine** | Sep 29, 2026 | Created `survey_responses` table (`response_json` JSONB). Created `/api/survey/submit` endpoint for saving responses and marking token `status = 'completed'` with `completed_at` timestamp. Added duplicate submission blocking and revisit protection. Achieved Minimum Viable Survey Platform (MVSP) milestone. | Completed |
+
+### Production Security Checklist (Phase 7 Hardening)
+- [ ] Replace `GRANT ALL ON TABLE public.survey_responses TO anon...` with strict Row Level Security (RLS) policies.
+- [ ] Restrict `anon` key to Server-Side API execution only (no direct browser querying of `survey_responses`).
+- [ ] Restrict `SELECT` access on `survey_responses` strictly to authenticated admin roles.
 
 ---
 *Note: This PRD is continuously updated as new features, prompts, or structural changes are introduced to the project.*
