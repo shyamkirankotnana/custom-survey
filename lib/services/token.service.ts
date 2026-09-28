@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { nanoid } from 'nanoid';
 
 export interface TokenValidationResult {
   valid: boolean;
@@ -87,5 +88,57 @@ export const tokenService = {
       console.error('[TokenService] Unexpected error marking token as opened:', err);
       return false;
     }
+  },
+
+  /**
+   * Batch generate NanoIDs and store into survey_tokens
+   */
+  async generateBatch(count: number = 100) {
+    const records = Array.from({ length: count }).map(() => ({
+      token: nanoid(10),
+      status: 'pending',
+    }));
+
+    const { data, error } = await supabase
+      .from('survey_tokens')
+      .insert(records)
+      .select('id, token, status, generated_at');
+
+    if (error) {
+      console.error('[TokenService] Batch generation error:', error);
+      throw error;
+    }
+
+    return data || [];
+  },
+
+  /**
+   * Fetch all tokens for admin view
+   */
+  async getAllTokens(limit: number = 200) {
+    const { data, error } = await supabase
+      .from('survey_tokens')
+      .select('*')
+      .order('generated_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error('[TokenService] Error fetching tokens:', error);
+      return [];
+    }
+
+    return data || [];
+  },
+
+  /**
+   * Reset test token status back to pending (for dev testing)
+   */
+  async resetTokenStatus(token: string) {
+    const { error } = await supabase
+      .from('survey_tokens')
+      .update({ status: 'pending', opened_at: null, completed_at: null })
+      .eq('token', token);
+
+    return !error;
   },
 };
