@@ -95,8 +95,15 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
               className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm sm:text-base text-textPrimary placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
             />
 
-            {/* Character count on right */}
-            <div className="flex items-center justify-end mt-2 px-1 text-xs">
+            {/* Error Message & Character Counter below text box */}
+            <div className="flex items-center justify-between mt-2 px-1 text-xs">
+              <div>
+                {q2FollowUpText.length > 0 && q2FollowUpText.length < minLength && (
+                  <span className="text-red-600 font-bold animate-pulse">
+                    Minimum 20 characters needed
+                  </span>
+                )}
+              </div>
               <span className="font-semibold text-textSecondary">
                 {q2FollowUpText.length} / {maxLength}
               </span>

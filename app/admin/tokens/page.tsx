@@ -28,20 +28,32 @@ export default function AdminTokensPage() {
     }
   };
 
+  const [sqlBatches, setSqlBatches] = useState<any[] | null>(null);
+
   useEffect(() => {
-    loadTokens();
+    loadData();
   }, []);
 
-  const loadTokens = async () => {
+  const loadData = async () => {
     setLoading(true);
     try {
+      // 1. Try fetching SQL View batch history directly
+      const batchRes = await fetch('/api/admin/tokens/batches').catch(() => null);
+      if (batchRes && batchRes.ok) {
+        const batchData = await batchRes.json();
+        if (batchData.batches && batchData.batches.length > 0) {
+          setSqlBatches(batchData.batches);
+        }
+      }
+
+      // 2. Fetch tokens list for stats fallback
       const res = await fetch('/api/admin/tokens/list');
       if (res.ok) {
         const data = await res.json();
         setTokens(data.tokens || []);
       }
     } catch (err) {
-      console.error('Error loading tokens:', err);
+      console.error('Error loading token data:', err);
     } finally {
       setLoading(false);
     }
@@ -49,8 +61,8 @@ export default function AdminTokensPage() {
 
   const [batchCount, setBatchCount] = useState<number>(1);
 
-  const handleGenerate = async (countOverride?: number) => {
-    const countToGenerate = countOverride || batchCount || 1;
+  const handleGenerate = async () => {
+    const countToGenerate = batchCount || 1;
     setIsGenerating(true);
     setNotification(null);
     try {
@@ -64,7 +76,7 @@ export default function AdminTokensPage() {
       if (!res.ok) throw new Error(data.error || 'Generation failed');
 
       setNotification(`Successfully generated ${countToGenerate} survey link${countToGenerate > 1 ? 's' : ''}!`);
-      await loadTokens();
+      await loadData();
     } catch (err: any) {
       setNotification(`Error: ${err?.message || 'Failed to generate tokens'}`);
     } finally {
@@ -76,13 +88,54 @@ export default function AdminTokensPage() {
     window.open('/api/admin/tokens/export', '_blank');
   };
 
-  const pendingCount = tokens.filter((t) => t.status === 'pending').length;
-  const openedCount = tokens.filter((t) => t.status === 'opened').length;
-  const completedCount = tokens.filter((t) => t.status === 'completed').length;
+  // Group tokens into Batch Generation history fallback
+  const getFallbackBatches = () => {
+    const groups: { [key: string]: any[] } = {};
+
+    tokens.forEach((t) => {
+      const timeKey = t.generated_at ? new Date(t.generated_at).toISOString().slice(0, 19) : 'Unknown';
+      if (!groups[timeKey]) {
+        groups[timeKey] = [];
+      }
+      groups[timeKey].push(t);
+    });
+
+    const timeKeys = Object.keys(groups).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+
+    return timeKeys.map((key, idx) => {
+      const batchTokens = groups[key];
+      return {
+        id: key,
+        batchNumber: timeKeys.length - idx,
+        timestamp: batchTokens[0]?.generated_at ? new Date(batchTokens[0].generated_at).toLocaleString() : key,
+        count: batchTokens.length,
+        pendingCount: batchTokens.filter((t) => t.status === 'pending').length,
+        openedCount: batchTokens.filter((t) => t.status === 'opened').length,
+        completedCount: batchTokens.filter((t) => t.status === 'completed').length,
+        sampleToken: batchTokens[0]?.token || '',
+      };
+    });
+  };
+
+  const batches = sqlBatches || getFallbackBatches();
+
+  // Aggregate totals across all batches or tokens
+  const totalLinks = sqlBatches
+    ? sqlBatches.reduce((acc, b) => acc + (b.count || 0), 0)
+    : tokens.length;
+  const pendingCount = sqlBatches
+    ? sqlBatches.reduce((acc, b) => acc + (b.pendingCount || 0), 0)
+    : tokens.filter((t) => t.status === 'pending').length;
+  const openedCount = sqlBatches
+    ? sqlBatches.reduce((acc, b) => acc + (b.openedCount || 0), 0)
+    : tokens.filter((t) => t.status === 'opened').length;
+  const completedCount = sqlBatches
+    ? sqlBatches.reduce((acc, b) => acc + (b.completedCount || 0), 0)
+    : tokens.filter((t) => t.status === 'completed').length;
 
   return (
-    <main className="min-h-screen bg-gray-50 p-4 sm:p-8 font-sans text-gray-900">
-      <div className="max-w-5xl mx-auto space-y-6">
+    <main className="min-h-screen bg-gray-50 p-4 sm:p-8 font-sans text-gray-900 w-full">
+      <div className="w-full max-w-[1600px] mx-auto space-y-6">
         {/* Top Title Bar */}
         <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
@@ -95,183 +148,180 @@ export default function AdminTokensPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            {/* Batch Count Input & Button */}
-            <div className="flex items-center bg-gray-800 rounded-xl p-1 border border-gray-700">
-              <span className="text-[11px] font-bold text-gray-400 px-2.5">Qty:</span>
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            {/* Batch Count Input & Generate Button */}
+            <div className="flex items-center bg-gray-800 rounded-xl p-1.5 border border-gray-700 w-full sm:w-auto justify-between sm:justify-start">
+              <span className="text-xs font-bold text-gray-400 px-3">Qty:</span>
               <input
                 type="number"
                 min="1"
-                max="1000"
+                max="99999999"
+                step="1"
                 value={batchCount}
-                onChange={(e) => setBatchCount(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-16 bg-gray-900 text-white text-xs font-bold px-2 py-1.5 rounded-lg border border-gray-700 text-center focus:outline-none focus:border-orange-500"
+                onKeyDown={(e) => {
+                  if (['.', 'e', 'E', '+', '-'].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/[^0-9]/g, '');
+                  setBatchCount(cleaned ? Math.max(1, parseInt(cleaned, 10)) : 1);
+                }}
+                className="w-36 sm:w-44 bg-gray-900 text-white text-sm font-mono font-black px-3 py-2 rounded-lg border border-gray-700 text-center focus:outline-none focus:border-orange-500 shadow-inner [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <button
-                onClick={() => handleGenerate()}
+                onClick={handleGenerate}
                 disabled={isGenerating}
-                className="ml-1.5 px-4 py-1.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-extrabold text-xs rounded-lg flex items-center space-x-1.5 transition-all shadow-md disabled:opacity-50 cursor-pointer"
+                className="ml-2 px-5 py-2 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-extrabold text-xs rounded-lg flex items-center space-x-2 transition-all shadow-md disabled:opacity-50 cursor-pointer"
               >
                 {isGenerating ? (
                   <>
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <RefreshCw className="w-4 h-4 animate-spin" />
                     <span>Generating...</span>
                   </>
                 ) : (
                   <>
-                    <PlusCircle className="w-3.5 h-3.5" />
+                    <PlusCircle className="w-4 h-4" />
                     <span>Generate</span>
                   </>
                 )}
               </button>
             </div>
-
-            {/* Quick Presets */}
-            <div className="flex items-center space-x-1 bg-gray-800/80 p-1 rounded-xl border border-gray-700/60">
-              <button
-                onClick={() => handleGenerate(1)}
-                disabled={isGenerating}
-                className="px-2.5 py-1.5 bg-gray-700 hover:bg-gray-600 text-white font-bold text-[11px] rounded-lg transition-all cursor-pointer"
-                title="Generate 1 Token"
-              >
-                +1
-              </button>
-              <button
-                onClick={() => handleGenerate(10)}
-                disabled={isGenerating}
-                className="px-2.5 py-1.5 bg-gray-700 hover:bg-gray-600 text-white font-bold text-[11px] rounded-lg transition-all cursor-pointer"
-                title="Generate 10 Tokens"
-              >
-                +10
-              </button>
-              <button
-                onClick={() => handleGenerate(100)}
-                disabled={isGenerating}
-                className="px-2.5 py-1.5 bg-gray-700 hover:bg-gray-600 text-white font-bold text-[11px] rounded-lg transition-all cursor-pointer"
-                title="Generate 100 Tokens"
-              >
-                +100
-              </button>
-            </div>
-
-            <button
-              onClick={handleDownloadCSV}
-              className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 active:scale-95 text-white font-bold text-xs rounded-xl flex items-center space-x-2 transition-all border border-gray-700 cursor-pointer"
-              title="Download token,url CSV file"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export CSV</span>
-            </button>
           </div>
         </div>
 
         {/* Notification Banner */}
         {notification && (
           <div
-            className={`p-4 rounded-xl text-xs font-semibold flex items-center justify-between ${
+            className={`p-4 rounded-xl text-xs font-semibold flex items-center justify-between gap-3 ${
               notification.startsWith('Error')
                 ? 'bg-red-50 text-red-700 border border-red-200'
                 : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
             }`}
           >
-            <span>{notification}</span>
-            <button onClick={() => setNotification(null)} className="font-bold underline text-gray-500">
-              Dismiss
-            </button>
+            <div className="flex items-center space-x-2">
+              <span>{notification}</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              {!notification.startsWith('Error') && (
+                <button
+                  onClick={handleDownloadCSV}
+                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center space-x-1.5 transition-all cursor-pointer shadow-sm text-xs"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download CSV</span>
+                </button>
+              )}
+              <button onClick={() => setNotification(null)} className="font-bold underline text-gray-500 cursor-pointer">
+                Dismiss
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Analytics Summary Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Tokens</span>
-            <div className="text-2xl font-black text-gray-900">{tokens.length}</div>
+        {/* Full-Width Analytics Summary Cards (5-Column Wide Grid) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Total Links</span>
+            <div className="text-3xl font-black text-gray-900">{totalLinks.toLocaleString()}</div>
           </div>
-          <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-amber-600 uppercase tracking-wider">Pending</span>
-            <div className="text-2xl font-black text-amber-600">{pendingCount}</div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
+            <span className="text-xs font-bold text-purple-600 uppercase tracking-wider block">Batches Created</span>
+            <div className="text-3xl font-black text-purple-600">{batches.length.toLocaleString()}</div>
           </div>
-          <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Opened</span>
-            <div className="text-2xl font-black text-emerald-600">{openedCount}</div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
+            <span className="text-xs font-bold text-amber-600 uppercase tracking-wider block">Pending</span>
+            <div className="text-3xl font-black text-amber-600">{pendingCount.toLocaleString()}</div>
           </div>
-          <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Completed</span>
-            <div className="text-2xl font-black text-blue-600">{completedCount}</div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
+            <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Opened</span>
+            <div className="text-3xl font-black text-emerald-600">{openedCount.toLocaleString()}</div>
+          </div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
+            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block">Completed</span>
+            <div className="text-3xl font-black text-blue-600">{completedCount.toLocaleString()}</div>
           </div>
         </div>
 
-        {/* Token Table */}
+        {/* Batch Generation History Table */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-            <h2 className="text-sm font-extrabold uppercase tracking-wider text-gray-700">
-              Survey Links Database ({tokens.length})
-            </h2>
+          <div className="p-5 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <h2 className="text-base font-bold uppercase tracking-wide text-gray-800">
+                Batch Generation History ({batches.length} Batches)
+              </h2>
+            </div>
             <button
-              onClick={loadTokens}
-              className="text-xs font-semibold text-gray-500 hover:text-gray-900 flex items-center space-x-1"
+              onClick={loadData}
+              className="text-sm font-semibold text-gray-600 hover:text-gray-900 flex items-center space-x-1.5 cursor-pointer transition-colors"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
+              <RefreshCw className="w-4 h-4" />
               <span>Refresh</span>
             </button>
           </div>
 
           {loading ? (
-            <div className="p-12 text-center text-gray-400 font-semibold text-xs">
-              Loading tokens from Supabase...
+            <div className="p-12 text-center text-gray-500 font-semibold text-sm">
+              Loading generation history...
             </div>
-          ) : tokens.length === 0 ? (
+          ) : batches.length === 0 ? (
             <div className="p-12 text-center space-y-3">
-              <KeyRound className="w-8 h-8 text-gray-300 mx-auto" />
-              <p className="text-sm font-semibold text-gray-600">No tokens generated yet.</p>
-              <p className="text-xs text-gray-400">
-                Click <strong>"Generate"</strong> or use the <strong>+1 / +10 / +100</strong> preset buttons to create your survey links.
+              <KeyRound className="w-10 h-10 text-gray-300 mx-auto" />
+              <p className="text-base font-semibold text-gray-700">No generation batches created yet.</p>
+              <p className="text-sm text-gray-500">
+                Enter quantity above and click <strong>"Generate"</strong> to create your first batch of survey links.
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50 text-[11px] font-extrabold uppercase text-gray-500">
-                    <th className="py-3 px-4">#</th>
-                    <th className="py-3 px-4">Token</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4">Test Link</th>
-                    <th className="py-3 px-4">Generated At</th>
+                  <tr className="border-b border-gray-200 bg-gray-50 text-xs sm:text-sm font-bold uppercase text-gray-600">
+                    <th className="py-4 px-5">Batch</th>
+                    <th className="py-4 px-5">Generated At</th>
+                    <th className="py-4 px-5 text-center">Links Quantity</th>
+                    <th className="py-4 px-5">Status Breakdown</th>
+                    <th className="py-4 px-5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100 text-xs">
-                  {tokens.map((t, idx) => (
-                    <tr key={t.id} className="hover:bg-gray-50/80 transition-colors">
-                      <td className="py-3 px-4 text-gray-400 font-mono">{idx + 1}</td>
-                      <td className="py-3 px-4 font-mono font-bold text-gray-900">{t.token}</td>
-                      <td className="py-3 px-4">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                            t.status === 'pending'
-                              ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                              : t.status === 'opened'
-                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                              : t.status === 'completed'
-                              ? 'bg-blue-100 text-blue-800 border border-blue-200'
-                              : 'bg-gray-100 text-gray-700'
-                          }`}
-                        >
-                          {t.status}
-                        </span>
+                <tbody className="divide-y divide-gray-100 text-sm">
+                  {batches.map((b) => (
+                    <tr key={b.id} className="hover:bg-gray-50/80 transition-colors">
+                      <td className="py-4 px-5 font-bold text-gray-900 text-sm sm:text-base">
+                        Batch #{b.batchNumber}
                       </td>
-                      <td className="py-3 px-4">
-                        <a
-                          href={`/s/${t.token}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-orange-600 font-mono hover:underline text-[11px] font-bold"
-                        >
-                          /s/{t.token}
-                        </a>
+                      <td className="py-4 px-5 text-gray-800 font-semibold text-sm sm:text-base">
+                        {b.timestamp}
                       </td>
-                      <td className="py-3 px-4 text-gray-400 font-mono text-[11px]">
-                        {new Date(t.generated_at).toLocaleString()}
+                      <td className="py-4 px-5 font-bold text-gray-900 text-base sm:text-lg text-center">
+                        {b.count.toLocaleString()}
+                      </td>
+                      <td className="py-4 px-5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="px-3 py-1 rounded-md text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-200">
+                            {b.pendingCount} Pending
+                          </span>
+                          {b.openedCount > 0 && (
+                            <span className="px-3 py-1 rounded-md text-xs font-semibold bg-emerald-100 text-emerald-900 border border-emerald-200">
+                              {b.openedCount} Opened
+                            </span>
+                          )}
+                          {b.completedCount > 0 && (
+                            <span className="px-3 py-1 rounded-md text-xs font-semibold bg-blue-100 text-blue-900 border border-blue-200">
+                              {b.completedCount} Completed
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-4 px-5 text-right">
+                        <button
+                          onClick={handleDownloadCSV}
+                          className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs sm:text-sm font-bold rounded-lg inline-flex items-center space-x-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                          title="Export all generated survey links CSV"
+                        >
+                          <Download className="w-4 h-4" />
+                          <span>Export CSV</span>
+                        </button>
                       </td>
                     </tr>
                   ))}

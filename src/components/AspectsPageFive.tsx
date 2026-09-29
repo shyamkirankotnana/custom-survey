@@ -120,16 +120,16 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
           {/* Sticky Table Header — Freezes at top of scroll area while rows pass through underneath */}
           <div
             className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 46px)' }}
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 38px)' }}
           >
-            <div className="px-2 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider whitespace-nowrap">
+            <div className="px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
               Aspects
             </div>
             {options.map((opt) => {
               const colors = optionColors[opt];
               return (
-                <div key={opt} className="py-2.5 px-0 flex items-center justify-center text-center">
-                  <span className={`text-[8.5px] sm:text-[10px] font-extrabold ${colors.header} leading-none whitespace-nowrap text-center tracking-tight`}>
+                <div key={opt} className="py-2 px-0.5 flex items-center justify-center text-center">
+                  <span className={`text-[9px] sm:text-[11px] font-extrabold ${colors.header} leading-tight whitespace-normal text-center tracking-tight max-w-[34px]`}>
                     {opt}
                   </span>
                 </div>
@@ -154,16 +154,16 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                       ? 'bg-white'
                       : 'bg-gray-50/50'
                   } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
-                  style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 46px)' }}
+                  style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 38px)' }}
                 >
-                  {/* Aspect Label */}
-                  <div className="px-2 py-2.5 flex items-center min-h-[44px]">
-                    <span className="text-xs sm:text-sm text-textPrimary leading-snug font-semibold">
+                  {/* Aspect Label — Expanded width space & increased font size */}
+                  <div className="px-3 py-3 flex items-center min-h-[48px]">
+                    <span className="text-sm sm:text-base text-gray-900 leading-snug font-bold">
                       {item.title}
                     </span>
                   </div>
 
-                  {/* Radio Buttons */}
+                  {/* Radio Buttons — Positioned closer together */}
                   {options.map((opt) => {
                     const isSelected = selected === opt;
                     const colors = optionColors[opt];
@@ -173,7 +173,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                         key={opt}
                         type="button"
                         onClick={() => onRatingSelect(item.id, opt)}
-                        className="w-full h-full min-h-[44px] flex items-center justify-center cursor-pointer group focus:outline-none"
+                        className="w-full h-full min-h-[48px] flex items-center justify-center cursor-pointer group focus:outline-none"
                         aria-label={`${item.title} - ${opt}`}
                       >
                         <div

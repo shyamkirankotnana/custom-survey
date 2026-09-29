@@ -161,7 +161,7 @@ export const tokenService = {
   },
 
   /**
-   * Batch generate survey links and store into survey_tokens
+   * Batch generate survey links and store into survey_tokens (supports large batches via chunking)
    */
   async generateBatch(count: number = 100) {
     const records = Array.from({ length: count }).map(() => ({
@@ -169,23 +169,60 @@ export const tokenService = {
       status: 'pending',
     }));
 
-    const { data, error } = await supabase
-      .from('survey_tokens')
-      .insert(records)
-      .select('id, token, status, generated_at');
+    const CHUNK_SIZE = 1000;
+    const allInserted: any[] = [];
 
-    if (error) {
-      console.error('[TokenService] Batch generation error:', error);
-      throw error;
+    for (let i = 0; i < records.length; i += CHUNK_SIZE) {
+      const chunk = records.slice(i, i + CHUNK_SIZE);
+      const { data, error } = await supabase
+        .from('survey_tokens')
+        .insert(chunk)
+        .select('id, token, status, generated_at');
+
+      if (error) {
+        console.error('[TokenService] Batch generation error:', error);
+        throw error;
+      }
+      if (data) {
+        allInserted.push(...data);
+      }
     }
 
-    return data || [];
+    return allInserted;
   },
 
   /**
-   * Fetch all tokens for admin view
+   * Fetch batch generation history from SQL View vw_batch_summary
    */
-  async getAllTokens(limit: number = 200) {
+  async getBatchHistory() {
+    try {
+      const { data, error } = await supabase
+        .from('vw_batch_summary')
+        .select('*');
+
+      if (!error && data && data.length > 0) {
+        return data.map((b: any, idx: number) => ({
+          id: b.batch_time,
+          batchNumber: data.length - idx,
+          timestamp: new Date(b.batch_time).toLocaleString(),
+          count: Number(b.total_links) || 0,
+          pendingCount: Number(b.pending_count) || 0,
+          openedCount: Number(b.opened_count) || 0,
+          completedCount: Number(b.completed_count) || 0,
+          sampleToken: b.sample_token || '',
+        }));
+      }
+      return null;
+    } catch (err) {
+      console.error('[TokenService] Error fetching batch history:', err);
+      return null;
+    }
+  },
+
+  /**
+   * Fetch all tokens for admin view (default limit 10,000)
+   */
+  async getAllTokens(limit: number = 10000) {
     const { data, error } = await supabase
       .from('survey_tokens')
       .select('*')

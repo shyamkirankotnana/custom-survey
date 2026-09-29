@@ -41,12 +41,15 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
       <div className="w-full max-w-md space-y-3.5">
         {/* NPS Question Card */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder">
-          <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-4">
+          <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-5">
             Based on the recent interaction you had with your Relationship Manager how likely are you to recommend ICICI Bank to a friend, relative or colleague on a scale of 0 to 10?
           </h2>
 
-          {/* 0 to 10 Scale Buttons Grid — Expanded container width with large, bold score numbers */}
-          <div className="-mx-1 sm:-mx-2 px-1 sm:px-2 my-3.5">
+          {/* 1-Line Space between question & scale */}
+          <div className="h-2" />
+
+          {/* 0 to 10 Scale Buttons Grid — Increased font size by 1px and font-black bold */}
+          <div className="-mx-1 sm:-mx-2 px-1 sm:px-2 my-4">
             <div className="grid grid-cols-11 gap-0.5 sm:gap-1 w-full">
               {scores.map((score) => {
                 const isSelected = npsScore === score;
@@ -57,15 +60,15 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
                     key={score}
                     type="button"
                     onClick={() => onScoreSelect(score)}
-                    style={{ fontSize: 'clamp(12px, 3.8vw, 18px)' }}
-                    className={`h-11 sm:h-12 w-full rounded-lg font-extrabold flex items-center justify-center p-0 leading-none transition-all duration-150 cursor-pointer border-2 ${
+                    style={{ fontSize: 'clamp(14px, 4.5vw, 20px)' }}
+                    className={`h-11 sm:h-12 w-full rounded-lg font-black flex items-center justify-center p-0 leading-none transition-all duration-150 cursor-pointer border-2 ${
                       isSelected
                         ? `${colors.bg} text-white ${colors.border} shadow-md scale-[1.06] z-10`
-                        : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                        : 'bg-white text-gray-900 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                     }`}
                     aria-label={`Score ${score}`}
                   >
-                    <span className={score === 10 ? 'tracking-tighter font-black' : 'font-black'}>{score}</span>
+                    <span className="font-black tracking-tight">{score}</span>
                   </button>
                 );
               })}
@@ -99,8 +102,15 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
               className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm sm:text-base text-textPrimary placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
             />
 
-            {/* Character count on right */}
-            <div className="flex items-center justify-end mt-2 px-1 text-xs">
+            {/* Error Message & Character Counter below text box */}
+            <div className="flex items-center justify-between mt-2 px-1 text-xs">
+              <div>
+                {q1FollowUpText.length > 0 && q1FollowUpText.length < minLength && (
+                  <span className="text-red-600 font-bold animate-pulse">
+                    Minimum 20 characters needed
+                  </span>
+                )}
+              </div>
               <span className="font-semibold text-textSecondary">
                 {q1FollowUpText.length} / {maxLength}
               </span>

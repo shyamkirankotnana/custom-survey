@@ -18,7 +18,10 @@ interface AppProps {
   token?: string;
 }
 
-export const App: React.FC<AppProps> = ({ token }) => {
+export const App: React.FC<AppProps> = ({ token: propToken }) => {
+  // Fallback to URL query parameter (?token=...) if prop is not passed directly
+  const activeToken = propToken || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('token') || undefined : undefined);
+
   const [surveyState, setSurveyState] = useState<SurveyState>({
     page: 1,
     npsScore: null,
@@ -89,7 +92,7 @@ export const App: React.FC<AppProps> = ({ token }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          token: token,
+          token: activeToken,
           responseJson: responsePayload,
         }),
       });

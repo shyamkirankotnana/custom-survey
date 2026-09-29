@@ -3,18 +3,15 @@ import { tokenService } from '@/lib/services/token.service';
 
 export async function GET(req: NextRequest) {
   try {
-    const url = new URL(req.url);
-    const limit = Number(url.searchParams.get('limit')) || 10000;
-    const tokens = await tokenService.getAllTokens(limit);
+    const batches = await tokenService.getBatchHistory();
     return NextResponse.json({
       success: true,
-      count: tokens.length,
-      tokens,
+      batches: batches || [],
     });
   } catch (err: any) {
-    console.error('[Admin List API] Error:', err);
+    console.error('[Admin Batches API] Error:', err);
     return NextResponse.json(
-      { error: 'Failed to fetch tokens', details: err?.message },
+      { error: 'Failed to fetch batch history', details: err?.message },
       { status: 500 }
     );
   }
