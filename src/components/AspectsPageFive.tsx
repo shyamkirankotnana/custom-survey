@@ -129,7 +129,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
               const colors = optionColors[opt];
               return (
                 <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center">
-                  <span className={`text-[11px] sm:text-[13px] font-black ${colors.header} leading-[1.1] whitespace-normal text-center tracking-tight max-w-[42px]`}>
+                  <span className={`text-[12px] sm:text-[15px] font-black ${colors.header} leading-[1.05] whitespace-normal text-center tracking-tight max-w-[44px]`}>
                     {opt}
                   </span>
                 </div>
