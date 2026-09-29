@@ -120,7 +120,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
           {/* Sticky Table Header — Freezes at top of scroll area while rows pass through underneath */}
           <div
             className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 38px)' }}
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
           >
             <div className="px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
               Aspects
@@ -128,8 +128,8 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
             {options.map((opt) => {
               const colors = optionColors[opt];
               return (
-                <div key={opt} className="py-2 px-0.5 flex items-center justify-center text-center">
-                  <span className={`text-[9px] sm:text-[11px] font-extrabold ${colors.header} leading-tight whitespace-normal text-center tracking-tight max-w-[34px]`}>
+                <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center">
+                  <span className={`text-[11px] sm:text-[13px] font-black ${colors.header} leading-[1.1] whitespace-normal text-center tracking-tight max-w-[42px]`}>
                     {opt}
                   </span>
                 </div>
@@ -154,7 +154,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
                       ? 'bg-white'
                       : 'bg-gray-50/50'
                   } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
-                  style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 38px)' }}
+                  style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
                 >
                   {/* Aspect Label — Expanded width space & increased font size */}
                   <div className="px-3 py-3 flex items-center min-h-[48px]">

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { KeyRound, Download, RefreshCw, CheckCircle2, Clock, Eye, AlertCircle, PlusCircle } from 'lucide-react';
+import { KeyRound, Download, RefreshCw, CheckCircle2, Clock, Eye, AlertCircle, PlusCircle, Info } from 'lucide-react';
 
 export default function AdminTokensPage() {
   const [tokens, setTokens] = useState<any[]>([]);
@@ -221,24 +221,113 @@ export default function AdminTokensPage() {
 
         {/* Full-Width Analytics Summary Cards (5-Column Wide Grid) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Total Links</span>
+          {/* Total Links */}
+          <div className="group relative bg-white p-5 rounded-2xl border border-gray-200 hover:border-gray-400 hover:shadow-md transition-all space-y-1 text-center cursor-pointer">
+            <div className="opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white rounded-xl shadow-2xl border border-gray-700 text-xs z-50 text-left">
+              <div className="font-bold text-gray-300 mb-1 flex items-center gap-1">
+                <Info className="w-3.5 h-3.5 text-gray-400" />
+                <span>Total Links Formula</span>
+              </div>
+              <div className="font-mono text-[10px] bg-gray-800 p-1 rounded text-gray-200 mb-1 border border-gray-700">
+                COUNT(survey_tokens)
+              </div>
+              <p className="text-[11px] text-gray-300 leading-snug">
+                Total number of unique survey access links generated across all batch runs.
+              </p>
+            </div>
+
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-center gap-1">
+              Total Links
+              <Info className="w-3 h-3 text-gray-400" />
+            </span>
             <div className="text-3xl font-black text-gray-900">{totalLinks.toLocaleString()}</div>
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
-            <span className="text-xs font-bold text-purple-600 uppercase tracking-wider block">Batches Created</span>
+
+          {/* Batches Created */}
+          <div className="group relative bg-white p-5 rounded-2xl border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all space-y-1 text-center cursor-pointer">
+            <div className="opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white rounded-xl shadow-2xl border border-gray-700 text-xs z-50 text-left">
+              <div className="font-bold text-purple-400 mb-1 flex items-center gap-1">
+                <Info className="w-3.5 h-3.5 text-purple-400" />
+                <span>Batches Formula</span>
+              </div>
+              <div className="font-mono text-[10px] bg-gray-800 p-1 rounded text-gray-200 mb-1 border border-gray-700">
+                COUNT(DISTINCT generated_at)
+              </div>
+              <p className="text-[11px] text-gray-300 leading-snug">
+                Total number of batch token generation runs executed by administrators.
+              </p>
+            </div>
+
+            <span className="text-xs font-bold text-purple-600 uppercase tracking-wider flex items-center justify-center gap-1">
+              Batches Created
+              <Info className="w-3 h-3 text-purple-500" />
+            </span>
             <div className="text-3xl font-black text-purple-600">{batches.length.toLocaleString()}</div>
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
-            <span className="text-xs font-bold text-amber-600 uppercase tracking-wider block">Pending</span>
+
+          {/* Pending */}
+          <div className="group relative bg-white p-5 rounded-2xl border border-gray-200 hover:border-amber-300 hover:shadow-md transition-all space-y-1 text-center cursor-pointer">
+            <div className="opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white rounded-xl shadow-2xl border border-gray-700 text-xs z-50 text-left">
+              <div className="font-bold text-amber-400 mb-1 flex items-center gap-1">
+                <Info className="w-3.5 h-3.5 text-amber-400" />
+                <span>Pending Formula</span>
+              </div>
+              <div className="font-mono text-[10px] bg-gray-800 p-1 rounded text-gray-200 mb-1 border border-gray-700">
+                COUNT(status = 'pending')
+              </div>
+              <p className="text-[11px] text-gray-300 leading-snug">
+                Links generated but not yet opened by the customer.
+              </p>
+            </div>
+
+            <span className="text-xs font-bold text-amber-600 uppercase tracking-wider flex items-center justify-center gap-1">
+              Pending
+              <Info className="w-3 h-3 text-amber-500" />
+            </span>
             <div className="text-3xl font-black text-amber-600">{pendingCount.toLocaleString()}</div>
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
-            <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Opened</span>
+
+          {/* Opened */}
+          <div className="group relative bg-white p-5 rounded-2xl border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all space-y-1 text-center cursor-pointer">
+            <div className="opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white rounded-xl shadow-2xl border border-gray-700 text-xs z-50 text-left">
+              <div className="font-bold text-emerald-400 mb-1 flex items-center gap-1">
+                <Info className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Opened Formula</span>
+              </div>
+              <div className="font-mono text-[10px] bg-gray-800 p-1 rounded text-gray-200 mb-1 border border-gray-700">
+                COUNT(status = 'opened')
+              </div>
+              <p className="text-[11px] text-gray-300 leading-snug">
+                Links opened by recipients currently in progress of answering.
+              </p>
+            </div>
+
+            <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center justify-center gap-1">
+              Opened
+              <Info className="w-3 h-3 text-emerald-500" />
+            </span>
             <div className="text-3xl font-black text-emerald-600">{openedCount.toLocaleString()}</div>
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1 text-center">
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block">Completed</span>
+
+          {/* Completed */}
+          <div className="group relative bg-white p-5 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all space-y-1 text-center cursor-pointer">
+            <div className="opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white rounded-xl shadow-2xl border border-gray-700 text-xs z-50 text-left">
+              <div className="font-bold text-blue-400 mb-1 flex items-center gap-1">
+                <Info className="w-3.5 h-3.5 text-blue-400" />
+                <span>Completed Formula</span>
+              </div>
+              <div className="font-mono text-[10px] bg-gray-800 p-1 rounded text-gray-200 mb-1 border border-gray-700">
+                COUNT(status = 'completed')
+              </div>
+              <p className="text-[11px] text-gray-300 leading-snug">
+                Links where the recipient fully completed and submitted their survey.
+              </p>
+            </div>
+
+            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center justify-center gap-1">
+              Completed
+              <Info className="w-3 h-3 text-blue-500" />
+            </span>
             <div className="text-3xl font-black text-blue-600">{completedCount.toLocaleString()}</div>
           </div>
         </div>
