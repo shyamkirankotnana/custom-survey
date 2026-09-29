@@ -65,14 +65,14 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
                   key={opt}
                   type="button"
                   onClick={() => onChange(opt)}
-                  style={{ fontSize: 'clamp(9px, 2.8vw, 13px)' }}
-                  className={`h-11 sm:h-12 px-1 rounded-xl font-extrabold transition-all border whitespace-nowrap leading-none flex items-center justify-center cursor-pointer ${
+                  style={{ fontSize: 'clamp(11.5px, 3.2vw, 14px)' }}
+                  className={`h-11 sm:h-12 px-1 py-0.5 rounded-xl font-black transition-all border whitespace-normal text-center leading-[1.1] flex items-center justify-center cursor-pointer ${
                     isSelected
                       ? getOptionColor(opt)
-                      : 'bg-white text-gray-800 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                      : 'bg-white text-gray-900 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                   }`}
                 >
-                  <span>{opt}</span>
+                  <span className="text-center leading-[1.1] font-black">{opt}</span>
                 </button>
               );
             })}

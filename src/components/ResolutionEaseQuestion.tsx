@@ -44,15 +44,16 @@ export const ResolutionEaseQuestion: React.FC<ResolutionEaseQuestionProps> = ({
                 key={option}
                 type="button"
                 onClick={() => onChange(option)}
-                className={`min-h-[44px] px-4 py-2.5 rounded-full font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 flex-shrink-0 border touch-manipulation ${
+                style={{ fontSize: 'clamp(11.5px, 3.2vw, 14px)' }}
+                className={`min-h-[44px] px-3 py-1.5 rounded-full font-black text-center whitespace-normal leading-[1.1] transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 flex-shrink-0 border touch-manipulation ${
                   isSelected
                     ? 'bg-primary text-white border-primary shadow-brand scale-[1.02]'
                     : 'bg-white text-textPrimary border-bankBorder hover:border-primary/50 hover:bg-red-50/40 active:scale-95'
                 }`}
                 aria-pressed={isSelected}
               >
-                {isSelected && <Check className="w-4 h-4 stroke-[3]" />}
-                {option}
+                {isSelected && <Check className="w-4 h-4 stroke-[3] flex-shrink-0" />}
+                <span className="text-center leading-[1.1] font-black">{option}</span>
               </button>
             );
           })}
