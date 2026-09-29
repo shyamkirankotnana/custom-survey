@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICICI Bank RM Survey Platform — Functional Workflow Presentation</title>
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN for instant styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            iciciOrange: '#F97316',
+            iciciDark: '#0F172A',
+            iciciCard: '#1E293B',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0B0F19;
+      color: #F8FAFC;
+      font-family: 'Inter', sans-serif;
+    }
+    .slide {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .slide.active {
+      display: block;
+      opacity: 1;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-card-hover:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(249, 115, 22, 0.4);
+      transform: translateY(-2px);
+    }
+    .gradient-orange {
+      background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #FFEDD5 0%, #F97316 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media print {
+      body { background: white; color: black; }
+      .no-print { display: none !important; }
+      .slide { display: block !important; opacity: 1 !important; page-break-after: always; margin-bottom: 2rem; }
+      .glass-card { background: white; border: 1px solid #e2e8f0; color: black; }
+    }
+  </style>
+</head>
+<body className="min-h-screen flex flex-col justify-between antialiased selection:bg-orange-500 selection:text-white">
+
+  <!-- Top Fixed Presentation Header -->
+  <header className="no-print bg-slate-900/90 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 gradient-orange rounded-xl flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
+            <i data-lucide="shield-check" className="w-6 h-6"></i>
+          </div>
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="font-display font-extrabold text-lg text-white">ICICI Bank</span>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                Presentation Deck
+              </span>
+            </div>
+            <p className="text-xs text-slate-400">RM Survey & Analytics Engine Functional Workflow</p>
+          </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div className="flex items-center space-x-2">
+          <button id="prevBtn" onclick="changeSlide(-1)" className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            <i data-lucide="chevron-left" className="w-5 h-5"></i>
+          </button>
+          
+          <span className="text-xs font-mono font-bold text-slate-400 px-3 py-1 bg-slate-950 rounded-lg border border-slate-800">
+            Slide <span id="currentSlideNum" className="text-orange-400">1</span> of <span id="totalSlidesNum">6</span>
+          </span>
+
+          <button id="nextBtn" onclick="changeSlide(1)" className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            <i data-lucide="chevron-right" className="w-5 h-5"></i>
+          </button>
+
+          <div className="h-6 w-px bg-slate-800 mx-2"></div>
+
+          <button onclick="window.print()" className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white flex items-center space-x-1.5 transition-all">
+            <i data-lucide="printer" className="w-4 h-4"></i>
+            <span className="hidden sm:inline">Print PPT</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Slide Container -->
+  <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
+
+    <!-- ================= SLIDE 1: Executive Overview ================= -->
+    <section id="slide-1" className="slide active space-y-6">
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <span className="px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest bg-orange-500/10 text-orange-400 border border-orange-500/20 inline-block">
+          Executive Presentation Deck
+        </span>
+        <h1 className="font-display text-3xl sm:text-5xl font-black tracking-tight text-white">
+          ICICI Bank Relationship Manager Feedback Engine
+        </h1>
+        <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+          An enterprise-grade, data-driven platform designed to collect authentic customer feedback, calculate Net Promoter Scores (NPS) in real-time, and track service resolution performance.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+        <!-- Pillar 1 -->
+        <div className="glass-card glass-card-hover p-6 rounded-2xl space-y-3 transition-all">
+          <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center">
+            <i data-lucide="key-round" className="w-6 h-6"></i>
+          </div>
+          <h3 className="font-display font-bold text-lg text-white">1. Controlled Distribution</h3>
+          <p className="text-slate-400 text-xs leading-relaxed">
+            Unique, tamper-proof single-use links (`/s/[token]`) dispatched via SMS/Email to eliminate duplicate responses and guarantee authentic data collection.
+          </p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div className="glass-card glass-card-hover p-6 rounded-2xl space-y-3 transition-all">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="smartphone" className="w-6 h-6"></i>
+          </div>
+          <h3 className="font-display font-bold text-lg text-white">2. 3-Step Frictionless UI</h3>
+          <p className="text-slate-400 text-xs leading-relaxed">
+            Mobile-first 60-second survey flow covering NPS (0-10), CES Resolution Ease, and 8 RM Evaluation Aspects with dynamic validation.
+          </p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div className="glass-card glass-card-hover p-6 rounded-2xl space-y-3 transition-all">
+          <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
+            <i data-lucide="bar-chart-3" className="w-6 h-6"></i>
+          </div>
+          <h3 className="font-display font-bold text-lg text-white">3. Live Executive Analytics</h3>
+          <p className="text-slate-400 text-xs leading-relaxed">
+            Real-time NPS engine (+100 to -100), sentiment classification, funnel conversion rates, and plain-English self-explaining tooltips.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SLIDE 2: Stakeholders & System Roles ================= -->
+    <section id="slide-2" className="slide space-y-6">
+      <div className="border-b border-slate-800 pb-4">
+        <span className="text-xs font-extrabold uppercase tracking-wider text-orange-400">Slide 2</span>
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">System Architecture & Stakeholder Roles</h2>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Role 1: Admins -->
+        <div className="glass-card p-6 rounded-2xl space-y-4 border-l-4 border-l-orange-500">
+          <div className="flex items-center space-x-3">
+            <div className="p-3 bg-orange-500/20 text-orange-400 rounded-xl">
+              <i data-lucide="user-cog" className="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-base text-white">Administrators & Management</h3>
+              <span className="text-[11px] font-semibold text-orange-400">Operations Team</span>
+            </div>
+          </div>
+          <ul className="space-y-2.5 text-xs text-slate-300">
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5"></i>
+              <span>Generate token batches (+1, +10, +100, custom) for dispatches.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5"></i>
+              <span>Download CSV lists of active survey links.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5"></i>
+              <span>Monitor live NPS, Open Rates, and Completion Rates.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Role 2: Customers -->
+        <div className="glass-card p-6 rounded-2xl space-y-4 border-l-4 border-l-emerald-500">
+          <div className="flex items-center space-x-3">
+            <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl">
+              <i data-lucide="users" className="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-base text-white">ICICI Bank Customers</h3>
+              <span className="text-[11px] font-semibold text-emerald-400">Survey Recipients</span>
+            </div>
+          </div>
+          <ul className="space-y-2.5 text-xs text-slate-300">
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+              <span>Receive secure, non-transferable SMS/Email survey link.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+              <span>Complete guided 3-screen survey in ~45 seconds.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+              <span>Provide optional qualitative feedback with minimum 20-character rule.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Role 3: Analytics Engine -->
+        <div className="glass-card p-6 rounded-2xl space-y-4 border-l-4 border-l-blue-500">
+          <div className="flex items-center space-x-3">
+            <div className="p-3 bg-blue-500/20 text-blue-400 rounded-xl">
+              <i data-lucide="cpu" className="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-base text-white">Automated Engine (Supabase)</h3>
+              <span className="text-[11px] font-semibold text-blue-400">Backend Core</span>
+            </div>
+          </div>
+          <ul className="space-y-2.5 text-xs text-slate-300">
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+              <span>Auto-transitions status: `Pending` &rarr; `Opened` &rarr; `Completed`.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+              <span>Computes real-time NPS formula: `% Promoters - % Detractors`.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <i data-lucide="check-circle-2" className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+              <span>Stores JSON payloads for instant CSV/JSON exports.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SLIDE 3: Step 1 - Token Generation ================= -->
+    <section id="slide-3" className="slide space-y-6">
+      <div className="border-b border-slate-800 pb-4">
+        <span className="text-xs font-extrabold uppercase tracking-wider text-orange-400">Step 1 of 3</span>
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">Admin Token Generation & Dispatch</h2>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <!-- Flow Steps -->
+        <div className="lg:col-span-6 space-y-4">
+          <div className="glass-card p-4 rounded-xl flex items-start space-x-4 border-l-4 border-l-orange-500">
+            <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 font-extrabold flex items-center justify-center flex-shrink-0">1</div>
+            <div>
+              <h4 className="font-bold text-sm text-white">Batch Size Selection</h4>
+              <p className="text-xs text-slate-400 mt-1">Admin chooses quantity (e.g. 1 link for testing, or bulk 10, 100, 500) on `/admin/tokens`.</p>
+            </div>
+          </div>
+
+          <div className="glass-card p-4 rounded-xl flex items-start space-x-4 border-l-4 border-l-orange-500">
+            <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 font-extrabold flex items-center justify-center flex-shrink-0">2</div>
+            <div>
+              <h4 className="font-bold text-sm text-white">NanoID Token Allocation</h4>
+              <p className="text-xs text-slate-400 mt-1">System generates cryptographically secure, unique 10-character tokens marked as `Pending`.</p>
+            </div>
+          </div>
+
+          <div className="glass-card p-4 rounded-xl flex items-start space-x-4 border-l-4 border-l-orange-500">
+            <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 font-extrabold flex items-center justify-center flex-shrink-0">3</div>
+            <div>
+              <h4 className="font-bold text-sm text-white">CSV Export & Delivery</h4>
+              <p className="text-xs text-slate-400 mt-1">Admin downloads CSV report to route unique links to designated account holders.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- UI Preview Card -->
+        <div className="lg:col-span-6 glass-card p-6 rounded-2xl space-y-4 border border-slate-700 bg-slate-900/80">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <span className="text-xs font-bold text-slate-300 flex items-center gap-2">
+              <i data-lucide="key-round" className="w-4 h-4 text-orange-400"></i>
+              Token Generator UI Mockup
+            </span>
+            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Live Interface</span>
+          </div>
+
+          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-slate-400 font-bold">Qty:</span>
+              <div className="flex items-center space-x-2">
+                <input type="number" value="10" readonly className="w-20 bg-slate-900 text-white font-mono font-bold text-xs p-1.5 rounded border border-slate-700 text-center">
+                <button className="px-3 py-1.5 gradient-orange text-white text-xs font-bold rounded-lg flex items-center gap-1">
+                  <i data-lucide="plus-circle" className="w-3.5 h-3.5"></i>
+                  <span>Generate</span>
+                </button>
+              </div>
+            </div>
+            <div className="text-[11px] text-slate-500 font-mono">
+              Batch #3 Created &bull; 10 Tokens Pending &bull; 0 Opened
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SLIDE 4: Step 2 - Customer Survey Flow ================= -->
+    <section id="slide-4" className="slide space-y-6">
+      <div className="border-b border-slate-800 pb-4">
+        <span className="text-xs font-extrabold uppercase tracking-wider text-orange-400">Step 2 of 3</span>
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">Customer 3-Screen Survey Experience</h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Screen 1 Card -->
+        <div className="glass-card p-5 rounded-2xl space-y-3 border-t-4 border-t-orange-500">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">Screen 1</span>
+            <span className="text-[10px] font-mono text-slate-400">NPS Rating</span>
+          </div>
+          <h3 className="font-bold text-sm text-white">Net Promoter Score (0-10)</h3>
+          <p className="text-slate-400 text-xs leading-relaxed">
+            Customer rates likelihood of recommending ICICI Bank (0 to 10 scale).
+          </p>
+          <div className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300">
+            <span className="text-orange-400 font-bold">Rule:</span> Min 20 characters required if feedback is entered.
+          </div>
+        </div>
+
+        <!-- Screen 2 Card -->
+        <div className="glass-card p-5 rounded-2xl space-y-3 border-t-4 border-t-emerald-500">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Screen 2</span>
+            <span className="text-[10px] font-mono text-slate-400">CES Resolution</span>
+          </div>
+          <h3 className="font-bold text-sm text-white">Resolution Ease (4 Options)</h3>
+          <p className="text-slate-400 text-xs leading-relaxed">
+            Customer rates resolution ease: `Very Easy`, `Easy`, `Difficult`, `Very Difficult`.
+          </p>
+          <div className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300">
+            <span className="text-emerald-400 font-bold">Smart Trigger:</span> Selecting `Difficult` prompts improvement feedback box.
+          </div>
+        </div>
+
+        <!-- Screen 3 Card -->
+        <div className="glass-card p-5 rounded-2xl space-y-3 border-t-4 border-t-blue-500">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">Screen 3</span>
+            <span className="text-[10px] font-mono text-slate-400">RM Evaluation</span>
+          </div>
+          <h3 className="font-bold text-sm text-white">8 Key Aspect Matrix</h3>
+          <p className="text-slate-400 text-xs leading-relaxed">
+            Rates RM on Accessibility, Knowledge, Etiquette, Timelines, etc. (`Very Good` &rarr; `Very Poor`).
+          </p>
+          <div className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300">
+            <span className="text-blue-400 font-bold">Finish:</span> Triggers confetti celebration & Thank You confirmation.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SLIDE 5: Step 3 - Real-Time Executive Analytics ================= -->
+    <section id="slide-5" className="slide space-y-6">
+      <div className="border-b border-slate-800 pb-4">
+        <span className="text-xs font-extrabold uppercase tracking-wider text-orange-400">Step 3 of 3</span>
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">Real-Time Executive Analytics & Funnel Engine</h2>
+      </div>
+
+      <!-- NPS Breakdown -->
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="glass-card p-5 rounded-2xl text-center space-y-1 border-t-4 border-t-orange-500">
+          <span className="text-xs font-bold text-slate-400 uppercase">Master NPS Score</span>
+          <div className="text-4xl font-black text-white">+100</div>
+          <span className="text-[10px] text-slate-400 block">% Promoters - % Detractors</span>
+        </div>
+
+        <div className="glass-card p-5 rounded-2xl text-center space-y-1 border-t-4 border-t-emerald-500">
+          <span className="text-xs font-bold text-emerald-400 uppercase">Promoters (9-10)</span>
+          <div className="text-3xl font-black text-emerald-400">100%</div>
+          <span className="text-[10px] text-slate-400 block">Loyal Advocates</span>
+        </div>
+
+        <div className="glass-card p-5 rounded-2xl text-center space-y-1 border-t-4 border-t-amber-500">
+          <span className="text-xs font-bold text-amber-400 uppercase">Passives (7-8)</span>
+          <div className="text-3xl font-black text-amber-400">0%</div>
+          <span className="text-[10px] text-slate-400 block">Satisfied Neutral</span>
+        </div>
+
+        <div className="glass-card p-5 rounded-2xl text-center space-y-1 border-t-4 border-t-red-500">
+          <span className="text-xs font-bold text-red-400 uppercase">Detractors (0-6)</span>
+          <div className="text-3xl font-black text-red-400">0%</div>
+          <span className="text-[10px] text-slate-400 block">Dissatisfied</span>
+        </div>
+      </div>
+
+      <!-- Funnel Metrics Section -->
+      <div className="glass-card p-6 rounded-2xl space-y-4">
+        <h3 className="font-display font-bold text-base text-white border-b border-slate-800 pb-3 flex items-center justify-between">
+          <span>Live Funnel Conversion Performance</span>
+          <span className="text-xs text-orange-400 font-mono font-semibold">Self-Explainable Tooltips Active</span>
+        </h3>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-center">
+          <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
+            <span className="text-[11px] text-slate-400 font-bold block">Generated Links</span>
+            <span className="text-xl font-black text-white">13</span>
+            <span className="text-[10px] text-slate-500 block">Total links created</span>
+          </div>
+
+          <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
+            <span className="text-[11px] text-slate-400 font-bold block">Opened Links</span>
+            <span className="text-xl font-black text-blue-400">2</span>
+            <span className="text-[10px] text-slate-500 block">Links clicked</span>
+          </div>
+
+          <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
+            <span className="text-[11px] text-slate-400 font-bold block">Completed</span>
+            <span className="text-xl font-black text-emerald-400">1</span>
+            <span className="text-[10px] text-slate-500 block">Surveys submitted</span>
+          </div>
+
+          <div className="p-3 bg-amber-500/10 rounded-xl border border-amber-500/20">
+            <span className="text-[11px] text-amber-400 font-bold block">Open Rate</span>
+            <span className="text-xl font-black text-amber-400">15%</span>
+            <span className="text-[10px] text-slate-400 block">Opened ÷ Generated</span>
+          </div>
+
+          <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 col-span-2 sm:col-span-1">
+            <span className="text-[11px] text-emerald-400 font-bold block">Completion Rate</span>
+            <span className="text-xl font-black text-emerald-400">50%</span>
+            <span className="text-[10px] text-slate-400 block">Completed ÷ Opened</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SLIDE 6: Business Value & Summary ================= -->
+    <section id="slide-6" className="slide space-y-6">
+      <div className="border-b border-slate-800 pb-4">
+        <span className="text-xs font-extrabold uppercase tracking-wider text-orange-400">Summary</span>
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">Business Value & Compliance Highlights</h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="glass-card p-6 rounded-2xl space-y-3">
+          <div className="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center">
+            <i data-lucide="shield-alert" className="w-5 h-5"></i>
+          </div>
+          <h3 className="font-bold text-base text-white">100% Data Integrity & Anti-Spam</h3>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Token status auto-invalidates upon submission (`completed`). Customers cannot submit multiple responses, ensuring accurate executive reports.
+          </p>
+        </div>
+
+        <div className="glass-card p-6 rounded-2xl space-y-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="trending-up" className="w-5 h-5"></i>
+          </div>
+          <h3 className="font-bold text-base text-white">Immediate RM Performance Coaching</h3>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Low NPS scores or `Difficult` resolutions are flagged instantly in the Responses Explorer for quick follow-up and relationship management.
+          </p>
+        </div>
+
+        <div className="glass-card p-6 rounded-2xl space-y-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+            <i data-lucide="file-spreadsheet" className="w-5 h-5"></i>
+          </div>
+          <h3 className="font-bold text-base text-white">Instant CSV & JSON Exporting</h3>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Allows management to export raw datasets at any time for custom offline auditing, PowerBI integration, or CRM sync.
+          </p>
+        </div>
+
+        <div className="glass-card p-6 rounded-2xl space-y-3">
+          <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center">
+            <i data-lucide="sparkles" className="w-5 h-5"></i>
+          </div>
+          <h3 className="font-bold text-base text-white">Self-Explaining Metric Cards</h3>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Every metric includes mouse-over tooltips written in simple English, enabling team members to understand formulas without SQL knowledge.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <footer className="no-print bg-slate-900/90 border-t border-slate-800 p-4">
+    <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="flex items-center space-x-2 text-xs text-slate-400">
+        <i data-lucide="info" className="w-4 h-4 text-orange-400"></i>
+        <span>Use arrow keys or buttons above to navigate slides</span>
+      </div>
+
+      <div className="flex items-center space-x-4">
+        <a href="/admin/analytics" target="_blank" className="text-xs font-bold text-orange-400 hover:underline flex items-center gap-1">
+          <span>Open Live Admin Portal</span>
+          <i data-lucide="external-link" className="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Lucide Icons initialization
+    lucide.createIcons();
+
+    // Slide Deck Navigation Logic
+    let currentSlide = 1;
+    const totalSlides = 6;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+
+      currentSlide = index;
+
+      document.querySelectorAll('.slide').forEach((slide, idx) => {
+        if (idx + 1 === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      document.getElementById('currentSlideNum').innerText = currentSlide;
+      document.getElementById('totalSlidesNum').innerText = totalSlides;
+
+      document.getElementById('prevBtn').disabled = currentSlide === 1;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+    }
+
+    function changeSlide(direction) {
+      showSlide(currentSlide + direction);
+    }
+
+    // Keyboard Arrow Key Navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        changeSlide(-1);
+      }
+    });
+
+    // Initialize Slide 1
+    showSlide(1);
+  </script>
+</body>
+</html>
