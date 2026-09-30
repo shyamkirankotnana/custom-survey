@@ -104,98 +104,100 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   const isQ3Complete = aspectItems.length === Object.keys(ratings).length;
 
   return (
-    <div className="flex-1 flex flex-col justify-between px-1.5 sm:px-3 pt-0 bg-bankBg text-textPrimary h-full overflow-hidden">
-      {/* Main Scroll Container */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto no-scrollbar pb-2 relative">
-
-        {/* STICKY TABLE HEADER — Freezes at top-0 (z-30) right under the progress bar line */}
-        <div
-          className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl mt-1.5 sm:mt-2"
-          style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
-        >
-          <div className="px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
-            Aspects
-          </div>
-          {options.map((opt) => {
-            const colors = optionColors[opt];
-            return (
-              <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center">
-                <span className={`text-[12px] sm:text-[15px] font-black ${colors.header} leading-[1.05] whitespace-normal text-center tracking-tight max-w-[44px]`}>
-                  {opt}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Q3 Section Title Card — Rendered at z-10 in scroll flow so it slides UNDERNEATH the sticky header on scroll */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder my-2.5 flex-shrink-0 relative z-10">
+    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary h-full">
+      {/* Scrollable Container */}
+      <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2 relative">
+        {/* Card 1: Q3 Question Title */}
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
           <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">
             Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
-        {/* Aspect Rows Card */}
-        <div className="bg-white rounded-b-2xl shadow-card border border-bankBorder border-t-0 overflow-hidden relative z-10">
-          {aspectItems.map((item, idx) => {
-            const selected = ratings[item.id] || null;
-            const isEvenRow = idx % 2 === 0;
-            const selectedColor = selected ? optionColors[selected] : null;
-
-            return (
-              <div
-                key={item.id}
-                className={`border-b border-gray-100 last:border-b-0 ${
-                  selectedColor
-                    ? selectedColor.rowBg
-                    : isEvenRow
-                    ? 'bg-white'
-                    : 'bg-gray-50/50'
-                } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
-                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
-              >
-                {/* Aspect Label */}
-                <div className="px-3 py-3 flex items-center min-h-[48px]">
-                  <span className="text-sm sm:text-base text-gray-900 leading-snug font-bold">
-                    {item.title}
+        {/* Card 2: Aspects Table (Header + Rows) */}
+        <div className="relative">
+          {/* Sticky Table Header — Sticks at top-0 under progress bar when user scrolls down */}
+          <div
+            className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl"
+            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
+          >
+            <div className="px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
+              Aspects
+            </div>
+            {options.map((opt) => {
+              const colors = optionColors[opt];
+              return (
+                <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center">
+                  <span className={`text-[12px] sm:text-[15px] font-black ${colors.header} leading-[1.05] whitespace-normal text-center tracking-tight max-w-[44px]`}>
+                    {opt}
                   </span>
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Radio Buttons */}
-                {options.map((opt) => {
-                  const isSelected = selected === opt;
-                  const colors = optionColors[opt];
+          {/* Aspect Rows Card */}
+          <div className="bg-white rounded-b-2xl shadow-card border border-bankBorder border-t-0">
+            {aspectItems.map((item, idx) => {
+              const selected = ratings[item.id] || null;
+              const isEvenRow = idx % 2 === 0;
+              const selectedColor = selected ? optionColors[selected] : null;
 
-                  return (
-                    <button
-                      key={opt}
-                      type="button"
-                      onClick={() => onRatingSelect(item.id, opt)}
-                      className="w-full h-full min-h-[48px] flex items-center justify-center cursor-pointer group focus:outline-none"
-                      aria-label={`${item.title} - ${opt}`}
-                    >
-                      <div
-                        className={`w-[22px] h-[22px] rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
-                          isSelected
-                            ? `${colors.radio} shadow-sm scale-105`
-                            : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
-                        }`}
+              return (
+                <div
+                  key={item.id}
+                  className={`border-b border-gray-100 last:border-b-0 ${
+                    selectedColor
+                      ? selectedColor.rowBg
+                      : isEvenRow
+                      ? 'bg-white'
+                      : 'bg-gray-50/50'
+                  } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
+                  style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
+                >
+                  {/* Aspect Label */}
+                  <div className="px-3 py-3 flex items-center min-h-[48px]">
+                    <span className="text-sm sm:text-base text-gray-900 leading-snug font-bold">
+                      {item.title}
+                    </span>
+                  </div>
+
+                  {/* Radio Buttons */}
+                  {options.map((opt) => {
+                    const isSelected = selected === opt;
+                    const colors = optionColors[opt];
+
+                    return (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => onRatingSelect(item.id, opt)}
+                        className="w-full h-full min-h-[48px] flex items-center justify-center cursor-pointer group focus:outline-none"
+                        aria-label={`${item.title} - ${opt}`}
                       >
-                        {isSelected && (
-                          <div className="w-2 h-2 rounded-full bg-white" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            );
-          })}
+                        <div
+                          className={`w-[22px] h-[22px] rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
+                            isSelected
+                              ? `${colors.radio} shadow-sm scale-105`
+                              : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
+                          }`}
+                        >
+                          {isSelected && (
+                            <div className="w-2 h-2 rounded-full bg-white" />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Q4 — Appears ONLY after all 8 aspects of Q3 have been rated */}
+        {/* Card 3: Q4 Feedback Text Area — Appears ONLY after all 8 aspects of Q3 have been rated */}
         {isQ3Complete && (
-          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0 animate-fade-in mt-3 relative z-10">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0 animate-fade-in">
             <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-3">
               Is there any other feedback related to your Relationship Manager that you want to share?
             </h2>
