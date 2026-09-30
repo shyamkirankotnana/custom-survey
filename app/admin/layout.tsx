@@ -22,6 +22,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       icon: KeyRound,
       description: 'Generate & Export Survey Links',
     },
+    {
+      label: 'Responses Explorer',
+      href: '/admin/responses',
+      icon: MessageSquareText,
+      description: 'Inspect Submissions & Data',
+    },
   ];
 
   return (

@@ -55,6 +55,9 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
             How easy was it for you to get a resolution from your ICICI Bank Relationship Manager for your query / transaction?
           </h2>
 
+          {/* 1-Line Space between question & options */}
+          <div className="h-3" />
+
           {/* Option Pills — Positive to Negative with label-based color grading */}
           <div className="grid grid-cols-4 gap-1 sm:gap-1.5 w-full my-2.5">
             {options.map((opt) => {
