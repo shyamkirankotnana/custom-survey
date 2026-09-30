@@ -64,8 +64,6 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     'Very Poor',
   ];
 
-
-
   // Option color grading based on label
   const optionColors: Record<
     string,
@@ -106,99 +104,98 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   const isQ3Complete = aspectItems.length === Object.keys(ratings).length;
 
   return (
-    <div className="flex-1 flex flex-col justify-between px-1.5 sm:px-3 pt-1 sm:pt-2 bg-bankBg text-textPrimary h-full overflow-hidden">
-      <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2 relative">
-        {/* Q3 Section Title — Positioned below sticky header z-index layer so it slides underneath on scroll */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0 relative z-10">
+    <div className="flex-1 flex flex-col justify-between px-1.5 sm:px-3 pt-0 bg-bankBg text-textPrimary h-full overflow-hidden">
+      {/* Main Scroll Container */}
+      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto no-scrollbar pb-2 relative">
+
+        {/* STICKY TABLE HEADER — Freezes at top-0 (z-30) right under the progress bar line */}
+        <div
+          className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl mt-1.5 sm:mt-2"
+          style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
+        >
+          <div className="px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
+            Aspects
+          </div>
+          {options.map((opt) => {
+            const colors = optionColors[opt];
+            return (
+              <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center">
+                <span className={`text-[12px] sm:text-[15px] font-black ${colors.header} leading-[1.05] whitespace-normal text-center tracking-tight max-w-[44px]`}>
+                  {opt}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Q3 Section Title Card — Rendered at z-10 in scroll flow so it slides UNDERNEATH the sticky header on scroll */}
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder my-2.5 flex-shrink-0 relative z-10">
           <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">
             Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
-        {/* Sticky Header + Rows Wrapper — Header sticks at top-0 below progress bar */}
-        <div className="relative z-20">
-          {/* Sticky Table Header — Freezes at top of scroll area while questions & rows pass through underneath */}
-          <div
-            className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl"
-            style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
-          >
-            <div className="px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
-              Aspects
-            </div>
-            {options.map((opt) => {
-              const colors = optionColors[opt];
-              return (
-                <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center">
-                  <span className={`text-[12px] sm:text-[15px] font-black ${colors.header} leading-[1.05] whitespace-normal text-center tracking-tight max-w-[44px]`}>
-                    {opt}
+        {/* Aspect Rows Card */}
+        <div className="bg-white rounded-b-2xl shadow-card border border-bankBorder border-t-0 overflow-hidden relative z-10">
+          {aspectItems.map((item, idx) => {
+            const selected = ratings[item.id] || null;
+            const isEvenRow = idx % 2 === 0;
+            const selectedColor = selected ? optionColors[selected] : null;
+
+            return (
+              <div
+                key={item.id}
+                className={`border-b border-gray-100 last:border-b-0 ${
+                  selectedColor
+                    ? selectedColor.rowBg
+                    : isEvenRow
+                    ? 'bg-white'
+                    : 'bg-gray-50/50'
+                } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
+                style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
+              >
+                {/* Aspect Label */}
+                <div className="px-3 py-3 flex items-center min-h-[48px]">
+                  <span className="text-sm sm:text-base text-gray-900 leading-snug font-bold">
+                    {item.title}
                   </span>
                 </div>
-              );
-            })}
-          </div>
 
-          {/* Aspect Rows Card — All 8 rows at full natural height, no internal scroll */}
-          <div className="bg-white rounded-b-2xl shadow-card border border-bankBorder border-t-0 overflow-hidden">
-            {aspectItems.map((item, idx) => {
-              const selected = ratings[item.id] || null;
-              const isEvenRow = idx % 2 === 0;
-              const selectedColor = selected ? optionColors[selected] : null;
+                {/* Radio Buttons */}
+                {options.map((opt) => {
+                  const isSelected = selected === opt;
+                  const colors = optionColors[opt];
 
-              return (
-                <div
-                  key={item.id}
-                  className={`border-b border-gray-100 last:border-b-0 ${
-                    selectedColor
-                      ? selectedColor.rowBg
-                      : isEvenRow
-                      ? 'bg-white'
-                      : 'bg-gray-50/50'
-                  } transition-colors ${idx === aspectItems.length - 1 ? 'rounded-b-2xl' : ''}`}
-                  style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
-                >
-                  {/* Aspect Label — Expanded width space & increased font size */}
-                  <div className="px-3 py-3 flex items-center min-h-[48px]">
-                    <span className="text-sm sm:text-base text-gray-900 leading-snug font-bold">
-                      {item.title}
-                    </span>
-                  </div>
-
-                  {/* Radio Buttons — Positioned closer together */}
-                  {options.map((opt) => {
-                    const isSelected = selected === opt;
-                    const colors = optionColors[opt];
-
-                    return (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => onRatingSelect(item.id, opt)}
-                        className="w-full h-full min-h-[48px] flex items-center justify-center cursor-pointer group focus:outline-none"
-                        aria-label={`${item.title} - ${opt}`}
+                  return (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => onRatingSelect(item.id, opt)}
+                      className="w-full h-full min-h-[48px] flex items-center justify-center cursor-pointer group focus:outline-none"
+                      aria-label={`${item.title} - ${opt}`}
+                    >
+                      <div
+                        className={`w-[22px] h-[22px] rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
+                          isSelected
+                            ? `${colors.radio} shadow-sm scale-105`
+                            : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
+                        }`}
                       >
-                        <div
-                          className={`w-[22px] h-[22px] rounded-full border-2 transition-all flex items-center justify-center flex-shrink-0 ${
-                            isSelected
-                              ? `${colors.radio} shadow-sm scale-105`
-                              : `border-gray-300 bg-white ${colors.hoverBorder} group-active:scale-95`
-                          }`}
-                        >
-                          {isSelected && (
-                            <div className="w-2 h-2 rounded-full bg-white" />
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
+                        {isSelected && (
+                          <div className="w-2 h-2 rounded-full bg-white" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
 
         {/* Q4 — Appears ONLY after all 8 aspects of Q3 have been rated */}
         {isQ3Complete && (
-          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0 animate-fade-in">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0 animate-fade-in mt-3 relative z-10">
             <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-3">
               Is there any other feedback related to your Relationship Manager that you want to share?
             </h2>
@@ -212,7 +209,6 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
               className="w-full p-3 bg-gray-50/80 border border-gray-300 rounded-xl text-sm sm:text-base text-textPrimary placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all resize-none font-sans"
             />
 
-            {/* Q4 Footer — No minimum character requirement */}
             <div className="flex items-center justify-end mt-2 px-1 text-xs">
               <span className="font-semibold text-textSecondary">
                 {q4FeedbackText.length} / {maxLength}
@@ -255,4 +251,3 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     </div>
   );
 };
-
