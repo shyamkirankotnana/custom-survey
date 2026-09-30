@@ -125,6 +125,8 @@ All `/admin/*` routes share a top navigation bar defined in [app/admin/layout.ts
 
 * **Branch**: `nextjs-migration`
 * **Recent Commits**:
+  * `b5541bd`: Added vertical spacing between question text and rating options on Screen 2 (`Q2ResolutionPageThree.tsx`).
+  * `c535781`: Added `PROJECT_SESSION_SUMMARY.md` master documentation.
   * `872afe1`: Hidden Responses Explorer tab from top admin navigation header.
   * `7eee0ca`: Replaced technical card formulas with plain English explanations and enlarged Page 3 Aspects header font size.
   * `c68dc5a`: Fixed React `className` to HTML `class` attributes in `presentation.html`.
