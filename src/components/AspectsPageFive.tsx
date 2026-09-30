@@ -106,18 +106,18 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   const isQ3Complete = aspectItems.length === Object.keys(ratings).length;
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary h-full">
+    <div className="flex-1 flex flex-col justify-between px-1.5 sm:px-3 pt-1 sm:pt-2 bg-bankBg text-textPrimary h-full overflow-hidden">
       <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2 relative">
-        {/* Q3 Section Title */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
+        {/* Q3 Section Title — Positioned below sticky header z-index layer so it slides underneath on scroll */}
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0 relative z-10">
           <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">
             Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
-        {/* Sticky Header + Rows Wrapper — Header sticks at top-0 of scroll container, unpins after last row */}
-        <div>
-          {/* Sticky Table Header — Freezes at top of scroll area while rows pass through underneath */}
+        {/* Sticky Header + Rows Wrapper — Header sticks at top-0 below progress bar */}
+        <div className="relative z-20">
+          {/* Sticky Table Header — Freezes at top of scroll area while questions & rows pass through underneath */}
           <div
             className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl"
             style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}

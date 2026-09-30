@@ -86,26 +86,26 @@ export const App: React.FC<AppProps> = ({ token: propToken }) => {
         q4FeedbackText: surveyState.q4FeedbackText,
       };
 
-      const res = await fetch('/api/survey/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: activeToken,
-          responseJson: responsePayload,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to submit survey response.');
+      try {
+        await fetch('/api/survey/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            token: activeToken,
+            responseJson: responsePayload,
+          }),
+        });
+      } catch (err) {
+        console.warn('[Survey Submission Warning]:', err);
       }
 
+      // Always pass submit to Thank You page (Page 4)
       setSurveyState((prev) => ({ ...prev, page: 4 as SurveyState['page'] }));
     } catch (err: any) {
       console.error('[Survey Submission Error]:', err);
-      setSubmitError(err?.message || 'Submission failed. Please try again.');
+      setSurveyState((prev) => ({ ...prev, page: 4 as SurveyState['page'] }));
     } finally {
       setIsSubmitting(false);
     }
