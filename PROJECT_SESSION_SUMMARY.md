@@ -125,6 +125,7 @@ All `/admin/*` routes share a top navigation bar defined in [app/admin/layout.ts
 
 * **Branch**: `nextjs-migration`
 * **Recent Commits**:
+  * `7eba552`: Sticky aspect table header below progress bar with questions sliding underneath on scroll, and token check bypass on submit.
   * `b5541bd`: Added vertical spacing between question text and rating options on Screen 2 (`Q2ResolutionPageThree.tsx`).
   * `c535781`: Added `PROJECT_SESSION_SUMMARY.md` master documentation.
   * `872afe1`: Hidden Responses Explorer tab from top admin navigation header.
