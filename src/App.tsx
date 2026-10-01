@@ -146,7 +146,7 @@ export const App: React.FC<AppProps> = ({ token: propToken }) => {
   const progressPercentage = getProgressPercentage();
 
   return (
-    <div className="min-h-screen min-h-[100dvh] bg-bankBg flex flex-col w-full max-w-md mx-auto sm:my-4 sm:rounded-2xl sm:shadow-lg sm:border sm:border-gray-200 overflow-hidden">
+    <div className="h-screen h-[100dvh] max-h-[100dvh] bg-bankBg flex flex-col w-full max-w-md mx-auto sm:my-4 sm:rounded-2xl sm:shadow-lg sm:border sm:border-gray-200 overflow-hidden">
       {/* ICICI Orange Header */}
       <IciciHeader
         onBack={handleBackPage}

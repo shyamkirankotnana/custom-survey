@@ -17,6 +17,11 @@ export const tokenService = {
       return { valid: false, status: 'invalid', message: 'No survey token provided.' };
     }
 
+    // Mock bypass for testtoken testing URL
+    if (token === 'testtoken') {
+      return { valid: true, status: 'pending' };
+    }
+
     try {
       const { data, error } = await supabase
         .from('survey_tokens')
@@ -62,6 +67,8 @@ export const tokenService = {
    * Mark token as opened (if currently 'pending') and update opened_at timestamp
    */
   async markOpened(token: string): Promise<boolean> {
+    if (token === 'testtoken') return true;
+
     try {
       const { data } = await supabase
         .from('survey_tokens')

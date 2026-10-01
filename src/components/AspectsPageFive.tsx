@@ -104,31 +104,31 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
   const isQ3Complete = aspectItems.length === Object.keys(ratings).length;
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary h-full">
-      {/* Scrollable Container */}
+    <div className="flex-1 flex flex-col justify-between p-1.5 sm:p-3 bg-bankBg text-textPrimary h-full min-h-0 overflow-hidden">
+      {/* Single Scroll Container for Question Card, Sticky Header & Aspect Rows */}
       <div className="flex-1 flex flex-col min-h-0 space-y-3 overflow-y-auto no-scrollbar pb-2 relative">
-        {/* Card 1: Q3 Question Title */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0">
+        {/* 1. Question Title Card (z-10 relative) — Moves UP on scroll and slides underneath sticky header */}
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-card border border-bankBorder flex-shrink-0 relative z-10">
           <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">
             Please rate the Relationship Manager on the below aspects:
           </h2>
         </div>
 
-        {/* Card 2: Aspects Table (Header + Rows) */}
-        <div className="relative">
-          {/* Sticky Table Header — Sticks at top-0 under progress bar when user scrolls down */}
+        {/* 2. Aspects Table Card (Sticky Header + Rows) */}
+        <div className="bg-white rounded-2xl shadow-card border border-bankBorder relative">
+          {/* Sticky Table Header — Corners matched to outer card curvature with clean inner padding */}
           <div
-            className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl"
+            className="sticky top-0 z-30 border-b-2 border-orange-200 bg-orange-50 shadow-md rounded-t-2xl px-1.5 sm:px-2"
             style={{ display: 'grid', gridTemplateColumns: '1fr repeat(4, 44px)' }}
           >
-            <div className="px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
+            <div className="px-2 sm:px-3 py-2.5 text-xs sm:text-sm font-extrabold text-textPrimary flex items-center uppercase tracking-wider">
               Aspects
             </div>
             {options.map((opt) => {
               const colors = optionColors[opt];
               return (
                 <div key={opt} className="py-2.5 px-0.5 flex items-center justify-center text-center">
-                  <span className={`text-[12px] sm:text-[15px] font-black ${colors.header} leading-[1.05] whitespace-normal text-center tracking-tight max-w-[44px]`}>
+                  <span className={`text-[11.5px] sm:text-[14px] font-black ${colors.header} leading-[1.05] whitespace-normal text-center tracking-tight max-w-[42px]`}>
                     {opt}
                   </span>
                 </div>
@@ -136,8 +136,8 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
             })}
           </div>
 
-          {/* Aspect Rows Card */}
-          <div className="bg-white rounded-b-2xl shadow-card border border-bankBorder border-t-0">
+          {/* 8 Aspect Rows */}
+          <div className="rounded-b-2xl">
             {aspectItems.map((item, idx) => {
               const selected = ratings[item.id] || null;
               const isEvenRow = idx % 2 === 0;
@@ -195,9 +195,9 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
           </div>
         </div>
 
-        {/* Card 3: Q4 Feedback Text Area — Appears ONLY after all 8 aspects of Q3 have been rated */}
+        {/* 3. Q4 Feedback Text Area — Appears ONLY after all 8 aspects of Q3 have been rated */}
         {isQ3Complete && (
-          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0 animate-fade-in">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder flex-shrink-0 animate-fade-in relative z-10">
             <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-3">
               Is there any other feedback related to your Relationship Manager that you want to share?
             </h2>
@@ -220,7 +220,7 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
         )}
       </div>
 
-      {/* Orange CTA Button — "Submit" */}
+      {/* 4. Orange CTA Button — "Submit" */}
       <div className="pt-2 pb-2 bg-bankBg flex flex-col items-center justify-center flex-shrink-0 z-20 border-t border-gray-200/40">
         {submitError && (
           <div className="mb-2 px-3 py-1.5 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 font-semibold text-center max-w-xs">
