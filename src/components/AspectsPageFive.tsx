@@ -75,25 +75,25 @@ export const AspectsPageFive: React.FC<AspectsPageFiveProps> = ({
     }
   > = {
     'Very Good': {
-      header: 'text-green-700',
+      header: 'text-gray-900',
       radio: 'border-green-600 bg-green-600',
       rowBg: 'bg-green-50/40',
       hoverBorder: 'group-hover:border-green-500',
     },
     'Good': {
-      header: 'text-emerald-700',
+      header: 'text-gray-900',
       radio: 'border-emerald-500 bg-emerald-500',
       rowBg: 'bg-emerald-50/40',
       hoverBorder: 'group-hover:border-emerald-400',
     },
     'Poor': {
-      header: 'text-orange-700',
+      header: 'text-gray-900',
       radio: 'border-orange-500 bg-orange-500',
       rowBg: 'bg-orange-50/40',
       hoverBorder: 'group-hover:border-orange-400',
     },
     'Very Poor': {
-      header: 'text-red-700',
+      header: 'text-gray-900',
       radio: 'border-red-600 bg-red-600',
       rowBg: 'bg-red-50/40',
       hoverBorder: 'group-hover:border-red-500',

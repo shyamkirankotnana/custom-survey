@@ -27,7 +27,7 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
 
   const maxLength = 500;
   const minLength = 20;
-  const isDifficult = value === 'Difficult' || value === 'Very Difficult';
+  const requiresFollowUp = value === 'Easy' || value === 'Difficult' || value === 'Very Difficult';
   const isFollowUpValid = q2FollowUpText.length >= minLength;
 
   // Color mapping for options based on label (Very Easy = Green, Easy = Emerald, Difficult = Orange, Very Difficult = Red)
@@ -82,8 +82,8 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
           </div>
         </div>
 
-        {/* Inline Follow-up for Difficult/Very Difficult (same screen) */}
-        {isDifficult && (
+        {/* Inline follow-up for Easy, Difficult, and Very Difficult (same screen) */}
+        {requiresFollowUp && (
           <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-card border border-bankBorder">
             <h2 className="text-base sm:text-lg font-bold text-textPrimary leading-snug mb-3">
               What could have made the recent interaction with your ICICI Bank Relationship Manager easier? Could you please explain with an example?
@@ -119,9 +119,9 @@ export const Q2ResolutionPageThree: React.FC<Q2ResolutionPageThreeProps> = ({
           <button
             type="button"
             onClick={onNext}
-            disabled={value === null || (isDifficult && !isFollowUpValid)}
+            disabled={value === null || (requiresFollowUp && !isFollowUpValid)}
             className={`w-48 h-12 rounded-full font-extrabold text-base flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer shadow-md ${
-              value !== null && (!isDifficult || isFollowUpValid)
+              value !== null && (!requiresFollowUp || isFollowUpValid)
                 ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98]'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
             }`}

@@ -61,14 +61,14 @@ export const NpsPageOne: React.FC<NpsPageOneProps> = ({
                     type="button"
                     onClick={() => onScoreSelect(score)}
                     style={{ fontSize: 'clamp(14px, 4.5vw, 20px)' }}
-                    className={`h-11 sm:h-12 w-full rounded-lg font-black flex items-center justify-center p-0 leading-none transition-all duration-150 cursor-pointer border-2 ${
+                    className={`h-11 sm:h-12 w-full rounded-lg font-normal flex items-center justify-center p-0 leading-none transition-all duration-150 cursor-pointer border-2 ${
                       isSelected
                         ? `${colors.bg} text-white ${colors.border} shadow-md scale-[1.06] z-10`
                         : 'bg-white text-gray-900 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                     }`}
                     aria-label={`Score ${score}`}
                   >
-                    <span className="font-black tracking-tight">{score}</span>
+                    <span className="font-normal tracking-tight">{score}</span>
                   </button>
                 );
               })}
