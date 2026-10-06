@@ -1,0 +1,46 @@
+name: Supabase heartbeat
+
+on:
+  schedule:
+    # Monday and Thursday, 04:17 UTC (09:47 Asia/Kolkata).
+    - cron: '17 4 * * 1,4'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: supabase-heartbeat
+  cancel-in-progress: false
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read one survey token ID
+        shell: bash
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$SUPABASE_URL" || -z "$SUPABASE_ANON_KEY" ]]; then
+            echo '::error::Configure the SUPABASE_URL and SUPABASE_ANON_KEY repository secrets.'
+            exit 1
+          fi
+
+          if [[ "$SUPABASE_URL" != https://* ]]; then
+            echo '::error::SUPABASE_URL must use HTTPS.'
+            exit 1
+          fi
+
+          curl --fail --silent --show-error \
+            --connect-timeout 10 --max-time 30 \
+            --retry 3 --retry-delay 5 --retry-max-time 150 \
+            --header "apikey: $SUPABASE_ANON_KEY" \
+            --header "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            --output /dev/null \
+            "${SUPABASE_URL%/}/rest/v1/survey_tokens?select=id&limit=1"
+
+          echo 'Supabase database heartbeat succeeded.'
