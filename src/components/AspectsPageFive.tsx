@@ -19,7 +19,7 @@ export const aspectItems = [
   },
   {
     id: 'frequency',
-    title: 'Frequency/ regularity of proactively being in touch with you',
+    title: 'Frequency/ regularity of being in touch with you',
   },
   {
     id: 'banking_knowledge',
